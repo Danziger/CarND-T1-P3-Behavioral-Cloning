@@ -5,21 +5,22 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 from keras.models import Sequential
-from keras.layers import Lambda, Flatten, Dense, Cropping2D, Convolution2D, MaxPooling2D
+from keras.layers import Lambda, Flatten, Dense, Cropping2D, Convolution2D, MaxPooling2D, Dropout
 
 
 # CONSTANTS:
 
 # Data:
-DATA_DIR = './data/BEACH-4-LAPS/'
+DATA_DIR = './data/BEACH-4-LAPS-CLOCKWISE/'
 IMG_DIR = DATA_DIR + 'IMG/'
 LOG_FILE = DATA_DIR + 'driving_log.csv'
 
+ANGLE_CORRECTION = 0.2
 TEST_SIZE = 0.2
 MODEL_FILE = './model.h5'
 
 # Generator:
-GENERATOR_BATCH_SIZE = 32
+GENERATOR_BATCH_SIZE = 6
 
 # Image attributes:
 CHANNELS = 3
@@ -27,11 +28,15 @@ WIDTH = 320
 HEIGHT = 160
 
 # Cropping:
-CROP_TOP = 60
-CROP_BOTTOM = 20
+CROP_TOP = 70
+CROP_BOTTOM = 25
 CROP_SIDES = 0
 CROP_WIDTH = WIDTH - 2 * CROP_SIDES
 CROP_HEIGHT = HEIGHT - CROP_TOP - CROP_BOTTOM
+
+# Hyperparams:
+EPOCHS = 32
+
 
 # LOAD SAMPLES:
 
@@ -47,15 +52,16 @@ with open(LOG_FILE) as csvfile:
 
 train_samples, validation_samples = train_test_split(SAMPLES, test_size=TEST_SIZE)
 
+TRAIN_SAMPLES_COUNT = len(train_samples) * 6
+VALIDATION_SAMPLES_COUNT = len(validation_samples) * 6
 
 # IMAGE GENERATOR:
 
 def generator(samples, batch_size=GENERATOR_BATCH_SIZE):
     num_samples = len(samples)
 
-    # TODO: Use also side-camera images with correction...
-
     while True: # Loop forever so the generator never terminates
+
         shuffle(samples)
 
         for offset in range(0, num_samples, batch_size):
@@ -65,9 +71,15 @@ def generator(samples, batch_size=GENERATOR_BATCH_SIZE):
             angles = []
 
             for batch_sample in batch_samples:
-                name = IMG_DIR + batch_sample[0].replace('\\', '/').split('/')[-1]
+                # Names:
 
-                image_center = cv2.imread(name)
+                name_center = IMG_DIR + batch_sample[0].replace('\\', '/').split('/')[-1]
+                name_left = IMG_DIR + batch_sample[1].replace('\\', '/').split('/')[-1]
+                name_right = IMG_DIR + batch_sample[2].replace('\\', '/').split('/')[-1]
+
+                # Center Image:
+
+                image_center = cv2.imread(name_center)
                 angle_center = float(batch_sample[3])
                 images.append(image_center)
                 angles.append(angle_center)
@@ -76,6 +88,30 @@ def generator(samples, batch_size=GENERATOR_BATCH_SIZE):
                 angle_center_flip = -angle_center
                 images.append(image_center_flip)
                 angles.append(angle_center_flip)
+
+                # Left Image:
+
+                image_left = cv2.imread(name_left)
+                angle_left = angle_center + ANGLE_CORRECTION
+                images.append(image_left)
+                angles.append(angle_left)
+
+                image_left_flip = np.fliplr(image_left)
+                angle_left_flip = -angle_left
+                images.append(image_left_flip)
+                angles.append(angle_left_flip)
+
+                # Right Image:
+
+                image_right = cv2.imread(name_right)
+                angle_right = angle_center - ANGLE_CORRECTION
+                images.append(image_right)
+                angles.append(angle_right)
+
+                image_right_flip = np.fliplr(image_right)
+                angle_right_flip = -angle_right
+                images.append(image_right_flip)
+                angles.append(angle_right_flip)
 
             X_train = np.array(images)
             y_train = np.array(angles)
@@ -91,18 +127,28 @@ validation_generator = generator(validation_samples, batch_size=GENERATOR_BATCH_
 
 # TEST MODEL:
 
+# TODO: Original one uses YUV instead of RGB
+# TODO: Resize images to train faster?
+# TODO: Grayscale?
+# TODO: ...?
+
 model = Sequential()
+
 model.add(Cropping2D(cropping=((CROP_TOP, CROP_BOTTOM), (0, 0)), input_shape=(HEIGHT, WIDTH, CHANNELS)))
+
 model.add(Lambda(lambda x: (x / 255.0) - 0.5))
 
-model.add(Convolution2D(6, 5, 5, activation='relu'))
-model.add(MaxPooling2D())
-
-# model.add(Convolution2D(6, 5, 5, activation='relu'))
-# model.add(MaxPooling2D())
+model.add(Convolution2D(24, 5, 5, activation='elu', subsample=(2, 2)))
+model.add(Convolution2D(36, 5, 5, activation='elu', subsample=(2, 2)))
+model.add(Convolution2D(48, 5, 5, activation='elu', subsample=(2, 2)))
+model.add(Convolution2D(64, 3, 3, activation='elu'))
+model.add(Convolution2D(64, 3, 3, activation='elu'))
 
 model.add(Flatten())
-# model.add(Dense(60))
+
+model.add(Dense(100, activation='elu'))
+model.add(Dense(50, activation='elu'))
+model.add(Dense(10, activation='elu'))
 model.add(Dense(1))
 
 
@@ -112,10 +158,10 @@ model.compile(loss='mse', optimizer='adam')
 
 history = model.fit_generator(
     train_generator,
-    samples_per_epoch=2 * len(train_samples),
+    samples_per_epoch=TRAIN_SAMPLES_COUNT,
     validation_data=validation_generator,
-    nb_val_samples=2 * len(validation_samples),
-    nb_epoch=7
+    nb_val_samples=VALIDATION_SAMPLES_COUNT,
+    nb_epoch=EPOCHS
 )
 
 
