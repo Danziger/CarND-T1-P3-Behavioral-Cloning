@@ -1,6 +1,7 @@
 import csv
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 from keras.models import Sequential
@@ -97,10 +98,12 @@ model.add(Flatten())
 # model.add(Dense(60))
 model.add(Dense(1))
 
+
 # TRAINING THE MODEL:
 
 model.compile(loss='mse', optimizer='adam')
-model.fit_generator(
+
+history = model.fit_generator(
     train_generator,
     samples_per_epoch=len(train_samples),
     validation_data=validation_generator,
@@ -108,10 +111,23 @@ model.fit_generator(
     nb_epoch=7
 )
 
-print(model.summary())
-
-# TODO: Add plot
 
 # SAVE:
 
 model.save(MODEL_FILE)
+
+
+# MODEL SUMMARY:
+
+print(model.summary())
+
+
+# PLOT:
+
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model mean squared error loss')
+plt.ylabel('mean squared error loss')
+plt.xlabel('epoch')
+plt.legend(['training set', 'validation set'], loc='upper right')
+plt.show()
