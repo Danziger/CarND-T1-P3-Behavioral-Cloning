@@ -7,10 +7,14 @@ from sklearn.utils import shuffle
 from keras.models import Sequential
 from keras.layers import Lambda, Flatten, Dense, Cropping2D, Convolution2D, MaxPooling2D
 
+
 # CONSTANTS:
 
 # Data:
-LOG_FILE = './sample-training-data/driving_log.csv'
+DATA_DIR = './data/BEACH-4-LAPS/'
+IMG_DIR = DATA_DIR + 'IMG/'
+LOG_FILE = DATA_DIR + 'driving_log.csv'
+
 TEST_SIZE = 0.2
 MODEL_FILE = './model.h5'
 
@@ -61,14 +65,17 @@ def generator(samples, batch_size=GENERATOR_BATCH_SIZE):
             angles = []
 
             for batch_sample in batch_samples:
-                name = './sample-training-data/IMG/' + batch_sample[0].split('/')[-1]
-                center_image = cv2.imread(name)
-                center_angle = float(batch_sample[3])
-                images.append(center_image)
-                # images.append(center_image[CROP_TOP:-CROP_BOTTOM, :, :])
-                angles.append(center_angle)
+                name = IMG_DIR + batch_sample[0].replace('\\', '/').split('/')[-1]
 
-            # TODO: Trim image to only see section with road. HERE?
+                image_center = cv2.imread(name)
+                angle_center = float(batch_sample[3])
+                images.append(image_center)
+                angles.append(angle_center)
+
+                image_center_flip = np.fliplr(image_center)
+                angle_center_flip = -angle_center
+                images.append(image_center_flip)
+                angles.append(angle_center_flip)
 
             X_train = np.array(images)
             y_train = np.array(angles)
@@ -88,8 +95,8 @@ model = Sequential()
 model.add(Cropping2D(cropping=((CROP_TOP, CROP_BOTTOM), (0, 0)), input_shape=(HEIGHT, WIDTH, CHANNELS)))
 model.add(Lambda(lambda x: (x / 255.0) - 0.5))
 
-# model.add(Convolution2D(6, 5, 5, activation='relu'))
-# model.add(MaxPooling2D())
+model.add(Convolution2D(6, 5, 5, activation='relu'))
+model.add(MaxPooling2D())
 
 # model.add(Convolution2D(6, 5, 5, activation='relu'))
 # model.add(MaxPooling2D())
@@ -105,9 +112,9 @@ model.compile(loss='mse', optimizer='adam')
 
 history = model.fit_generator(
     train_generator,
-    samples_per_epoch=len(train_samples),
+    samples_per_epoch=2 * len(train_samples),
     validation_data=validation_generator,
-    nb_val_samples=len(validation_samples),
+    nb_val_samples=2 * len(validation_samples),
     nb_epoch=7
 )
 
