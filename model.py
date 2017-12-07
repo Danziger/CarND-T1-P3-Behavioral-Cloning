@@ -11,7 +11,7 @@ from keras.layers import Lambda, Flatten, Dense, Cropping2D, Convolution2D, MaxP
 # CONSTANTS:
 
 # Data:
-DATA_DIR = './data/BEACH-4-LAPS-CLOCKWISE/'
+DATA_DIR = './data/BEACH-EXAMPLE/'
 IMG_DIR = DATA_DIR + 'IMG/'
 LOG_FILE = DATA_DIR + 'driving_log.csv'
 
