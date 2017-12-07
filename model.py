@@ -127,7 +127,7 @@ validation_generator = generator(validation_samples, batch_size=GENERATOR_BATCH_
 
 # TEST MODEL:
 
-# TODO: Original one uses YUV instead of RGB
+# TODO: Original one uses YUV instead of RGB. Drive.py uses RGB but here is BGR!
 # TODO: Resize images to train faster?
 # TODO: Grayscale?
 # TODO: ...?
