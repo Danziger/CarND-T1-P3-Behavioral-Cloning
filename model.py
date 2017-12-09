@@ -1,4 +1,3 @@
-import csv
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,57 +6,29 @@ from sklearn.utils import shuffle
 from keras.models import Sequential
 from keras.layers import Lambda, Flatten, Dense, Cropping2D, Convolution2D, MaxPooling2D, Dropout
 
-
-# CONSTANTS:
-
-# Data:
-DATA_DIR = './data/BEACH-EXAMPLE/'
-IMG_DIR = DATA_DIR + 'IMG/'
-LOG_FILE = DATA_DIR + 'driving_log.csv'
-
-ANGLE_CORRECTION = 0.2
-TEST_SIZE = 0.2
-MODEL_FILE = './model.h5'
-
-# Generator:
-GENERATOR_BATCH_SIZE = 6
-
-# Image attributes:
-CHANNELS = 3
-WIDTH = 320
-HEIGHT = 160
-
-# Cropping:
-CROP_TOP = 70
-CROP_BOTTOM = 25
-CROP_SIDES = 0
-CROP_WIDTH = WIDTH - 2 * CROP_SIDES
-CROP_HEIGHT = HEIGHT - CROP_TOP - CROP_BOTTOM
-
-# Hyperparams:
-EPOCHS = 8
+import constants as CONST
+import utils
 
 
 # LOAD SAMPLES:
 
-with open(LOG_FILE) as csvfile:
-    reader = csv.reader(csvfile)
-
-    next(reader)  # Skip the headers.
-
-    SAMPLES = list(reader)
+samples = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_FILE, [
+    CONST.BEACH_4_CLOCK_FILE,
+    CONST.BEACH_4_ANTICLOCK_FILE,
+])
 
 
 # TRAIN/VALIDATION SPLITS:
 
-train_samples, validation_samples = train_test_split(SAMPLES, test_size=TEST_SIZE)
+train_samples, validation_samples = train_test_split(samples, test_size=CONST.TEST_SIZE)
 
 TRAIN_SAMPLES_COUNT = len(train_samples) * 6
 VALIDATION_SAMPLES_COUNT = len(validation_samples) * 6
 
+
 # IMAGE GENERATOR:
 
-def generator(samples, batch_size=GENERATOR_BATCH_SIZE):
+def generator(samples, batch_size=CONST.GENERATOR_BATCH_SIZE):
     num_samples = len(samples)
 
     while True: # Loop forever so the generator never terminates
@@ -73,14 +44,19 @@ def generator(samples, batch_size=GENERATOR_BATCH_SIZE):
             for batch_sample in batch_samples:
                 # Names:
 
-                name_center = IMG_DIR + batch_sample[0].replace('\\', '/').split('/')[-1]
-                name_left = IMG_DIR + batch_sample[1].replace('\\', '/').split('/')[-1]
-                name_right = IMG_DIR + batch_sample[2].replace('\\', '/').split('/')[-1]
+                # name_center = CONST.IMG_DIR + batch_sample[0].replace('\\', '/').split('/')[-1]
+                # name_left = CONST.IMG_DIR + batch_sample[1].replace('\\', '/').split('/')[-1]
+                # name_right = CONST.IMG_DIR + batch_sample[2].replace('\\', '/').split('/')[-1]
+
+                name_center = batch_sample["center"]
+                name_left = batch_sample["left"]
+                name_right = batch_sample["right"]
 
                 # Center Image:
 
                 image_center = cv2.imread(name_center)
-                angle_center = float(batch_sample[3])
+                image_center = image_center[...,::-1]
+                angle_center = batch_sample["steering"]
                 images.append(image_center)
                 angles.append(angle_center)
 
@@ -92,7 +68,8 @@ def generator(samples, batch_size=GENERATOR_BATCH_SIZE):
                 # Left Image:
 
                 image_left = cv2.imread(name_left)
-                angle_left = angle_center + ANGLE_CORRECTION
+                image_left = image_center[...,::-1]
+                angle_left = angle_center + CONST.ANGLE_CORRECTION
                 images.append(image_left)
                 angles.append(angle_left)
 
@@ -104,7 +81,8 @@ def generator(samples, batch_size=GENERATOR_BATCH_SIZE):
                 # Right Image:
 
                 image_right = cv2.imread(name_right)
-                angle_right = angle_center - ANGLE_CORRECTION
+                image_right = image_center[...,::-1]
+                angle_right = angle_center - CONST.ANGLE_CORRECTION
                 images.append(image_right)
                 angles.append(angle_right)
 
@@ -121,8 +99,8 @@ def generator(samples, batch_size=GENERATOR_BATCH_SIZE):
 
 # DATASETS GENERATORS:
 
-train_generator = generator(train_samples, batch_size=GENERATOR_BATCH_SIZE)
-validation_generator = generator(validation_samples, batch_size=GENERATOR_BATCH_SIZE)
+train_generator = generator(train_samples, batch_size=CONST.GENERATOR_BATCH_SIZE)
+validation_generator = generator(validation_samples, batch_size=CONST.GENERATOR_BATCH_SIZE)
 
 
 # TEST MODEL:
@@ -134,7 +112,7 @@ validation_generator = generator(validation_samples, batch_size=GENERATOR_BATCH_
 
 model = Sequential()
 
-model.add(Cropping2D(cropping=((CROP_TOP, CROP_BOTTOM), (0, 0)), input_shape=(HEIGHT, WIDTH, CHANNELS)))
+model.add(Cropping2D(cropping=((CONST.CROP_TOP, CONST.CROP_BOTTOM), (0, 0)), input_shape=(CONST.HEIGHT, CONST.WIDTH, CONST.CHANNELS)))
 
 model.add(Lambda(lambda x: (x / 255.0) - 0.5))
 
@@ -161,13 +139,13 @@ history = model.fit_generator(
     samples_per_epoch=TRAIN_SAMPLES_COUNT,
     validation_data=validation_generator,
     nb_val_samples=VALIDATION_SAMPLES_COUNT,
-    nb_epoch=EPOCHS
+    nb_epoch=CONST.EPOCHS
 )
 
 
 # SAVE:
 
-model.save(MODEL_FILE)
+model.save(CONST.MODEL_FILE)
 
 
 # MODEL SUMMARY:
