@@ -1,11 +1,14 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 from keras.models import Sequential
 from keras.layers import Lambda, Flatten, Dense, Cropping2D, Convolution2D, MaxPooling2D, Dropout
 from keras.optimizers import Adam
+from keras.regularizers import l2
+from keras.callbacks import ModelCheckpoint, Callback
 
 import constants as CONST
 import utils
@@ -109,7 +112,6 @@ validation_generator = generator(validation_samples, batch_size=CONST.GENERATOR_
 
 # TEST MODEL:
 
-# TODO: Original one uses YUV instead of RGB. Drive.py uses RGB but here is BGR!
 # TODO: Resize images to train faster?
 # TODO: Grayscale?
 # TODO: ...?
@@ -120,17 +122,17 @@ model.add(Cropping2D(cropping=((CONST.CROP_TOP, CONST.CROP_BOTTOM), (0, 0)), inp
 
 model.add(Lambda(lambda x: (x / 255.0) - 0.5))
 
-model.add(Convolution2D(24, 5, 5, activation='elu', subsample=(2, 2)))
-model.add(Convolution2D(36, 5, 5, activation='elu', subsample=(2, 2)))
-model.add(Convolution2D(48, 5, 5, activation='elu', subsample=(2, 2)))
-model.add(Convolution2D(64, 3, 3, activation='elu'))
-model.add(Convolution2D(64, 3, 3, activation='elu'))
+model.add(Convolution2D(24, 5, 5, W_regularizer=l2(0.001), activation='elu', subsample=(2, 2)))
+model.add(Convolution2D(36, 5, 5, W_regularizer=l2(0.001), activation='elu', subsample=(2, 2)))
+model.add(Convolution2D(48, 5, 5, W_regularizer=l2(0.001), activation='elu', subsample=(2, 2)))
+model.add(Convolution2D(64, 3, 3, W_regularizer=l2(0.001), activation='elu'))
+model.add(Convolution2D(64, 3, 3, W_regularizer=l2(0.001), activation='elu'))
 
 model.add(Flatten())
 
-model.add(Dense(100, activation='elu'))
-model.add(Dense(50, activation='elu'))
-model.add(Dense(10, activation='elu'))
+model.add(Dense(100, W_regularizer=l2(0.001), activation='elu'))
+model.add(Dense(50, W_regularizer=l2(0.001), activation='elu'))
+model.add(Dense(10, W_regularizer=l2(0.001), activation='elu'))
 model.add(Dense(1))
 
 
@@ -138,12 +140,15 @@ model.add(Dense(1))
 
 model.compile(loss='mse', optimizer=Adam(lr=1e-4))
 
+checkpoint = ModelCheckpoint(CONST.MODEL_PREFIX + '{epoch:03d}.h5')
+
 history = model.fit_generator(
     train_generator,
     samples_per_epoch=TRAIN_SAMPLES_COUNT,
     validation_data=validation_generator,
     nb_val_samples=VALIDATION_SAMPLES_COUNT,
-    nb_epoch=CONST.EPOCHS
+    nb_epoch=CONST.EPOCHS,
+    callbacks=[checkpoint]
 )
 
 
@@ -165,4 +170,4 @@ plt.title('model mean squared error loss')
 plt.ylabel('mean squared error loss')
 plt.xlabel('epoch')
 plt.legend(['training set', 'validation set'], loc='upper right')
-plt.show()
+plt.savefig('history.png')
