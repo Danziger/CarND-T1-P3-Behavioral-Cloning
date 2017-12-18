@@ -57,7 +57,7 @@ def generator(samples, batch_size=CONST.GENERATOR_BATCH_SIZE):
                 name_right = batch_sample["right"]
 
                 # Center Image:
-		
+
                 image_center_bgr = cv2.imread(name_center)
                 image_center = cv2.cvtColor(image_center_bgr, cv2.COLOR_BGR2YUV)
                 # image_center = image_center[...,::-1]
@@ -170,4 +170,4 @@ plt.title('model mean squared error loss')
 plt.ylabel('mean squared error loss')
 plt.xlabel('epoch')
 plt.legend(['training set', 'validation set'], loc='upper right')
-plt.savefig('history.png')
+plt.show()
