@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 from keras.models import Sequential
 from keras.layers import Lambda, Flatten, Dense, Cropping2D, Convolution2D, MaxPooling2D, Dropout
+from keras.optimizers import Adam
 
 import constants as CONST
 import utils
@@ -53,7 +54,7 @@ def generator(samples, batch_size=CONST.GENERATOR_BATCH_SIZE):
                 name_right = batch_sample["right"]
 
                 # Center Image:
-
+		
                 image_center_bgr = cv2.imread(name_center)
                 image_center = cv2.cvtColor(image_center_bgr, cv2.COLOR_BGR2YUV)
                 # image_center = image_center[...,::-1]
@@ -135,7 +136,7 @@ model.add(Dense(1))
 
 # TRAINING THE MODEL:
 
-model.compile(loss='mse', optimizer='adam')
+model.compile(loss='mse', optimizer=Adam(lr=1e-4))
 
 history = model.fit_generator(
     train_generator,
