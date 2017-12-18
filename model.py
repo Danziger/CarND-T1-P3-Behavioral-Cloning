@@ -146,8 +146,8 @@ history = model.fit_generator(
     samples_per_epoch=TRAIN_SAMPLES_COUNT,
     validation_data=validation_generator,
     nb_val_samples=VALIDATION_SAMPLES_COUNT,
-    nb_epoch=CONST.EPOCHS,
-    callbacks=[checkpoint]
+    nb_epoch=CONST.EPOCHS
+    # callbacks=[checkpoint]
 )
 
 
