@@ -17,8 +17,7 @@ import utils
 # LOAD SAMPLES:
 
 samples = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_FILE, [
-    CONST.BEACH_4_CLOCK_FILE,
-    CONST.BEACH_4_ANTICLOCK_FILE,
+    'BEACH-EXAMPLE'
 ])
 
 
