@@ -54,9 +54,9 @@ def generator(samples, batch_size=CONST.GENERATOR_BATCH_SIZE):
 
                 # Center Image:
 
-                image_center = cv2.imread(name_center)
-                image_center = cv2.cvtColor(image_center, cv2.COLOR_BGR2YUV)
-                image_center = image_center[...,::-1]
+                image_center_bgr = cv2.imread(name_center)
+                image_center = cv2.cvtColor(image_center_bgr, cv2.COLOR_BGR2YUV)
+                # image_center = image_center[...,::-1]
                 angle_center = batch_sample["steering"]
                 images.append(image_center)
                 angles.append(angle_center)
@@ -68,9 +68,9 @@ def generator(samples, batch_size=CONST.GENERATOR_BATCH_SIZE):
 
                 # Left Image:
 
-                image_left = cv2.imread(name_left)
-                image_left = cv2.cvtColor(image_left, cv2.COLOR_BGR2YUV)
-                image_left = image_center[...,::-1]
+                image_left_bgr = cv2.imread(name_left)
+                image_left = cv2.cvtColor(image_left_bgr, cv2.COLOR_BGR2YUV)
+                # image_left = image_center[...,::-1]
                 angle_left = angle_center + CONST.ANGLE_CORRECTION
                 images.append(image_left)
                 angles.append(angle_left)
@@ -82,9 +82,9 @@ def generator(samples, batch_size=CONST.GENERATOR_BATCH_SIZE):
 
                 # Right Image:
 
-                image_right = cv2.imread(name_right)
-                image_right = cv2.cvtColor(image_right, cv2.COLOR_BGR2YUV)
-                image_right = image_center[...,::-1]
+                image_right_bgr = cv2.imread(name_right)
+                image_right = cv2.cvtColor(image_right_bgr, cv2.COLOR_BGR2YUV)
+                # image_right = image_center[...,::-1]
                 angle_right = angle_center - CONST.ANGLE_CORRECTION
                 images.append(image_right)
                 angles.append(angle_right)
