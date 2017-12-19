@@ -144,7 +144,7 @@ model.add(Dense(1))
 
 # TRAINING THE MODEL:
 
-model.compile(loss='mse', optimizer=Adam(lr=1e-4))
+model.compile(loss='mse', optimizer=Adam(lr=0.0005))
 
 checkpoint = ModelCheckpoint(CONST.MODEL_PREFIX + '{epoch:03d}.h5')
 
