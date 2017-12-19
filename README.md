@@ -123,3 +123,14 @@ Will run the video at 48 FPS. The default FPS is 60.
 ## How to write a README
 A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
 
+
+Interesting reads
+=================
+
+- ADAM: A METHOD FOR STOCHASTIC OPTIMIZATION:
+
+  https://arxiv.org/pdf/1412.6980v9.pdf
+
+- An Analysis of the Regularization between L<sub>2</sub> and Dropout in Single Hidden Layer Neural Network.
+
+  http://uksim.info/isms2016/CD/data/0665a174.pdf

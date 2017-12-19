@@ -118,10 +118,6 @@ validation_generator = generator(validation_samples, batch_size=CONST.GENERATOR_
 
 # TEST MODEL:
 
-# TODO: Resize images to train faster?
-# TODO: Grayscale?
-# TODO: ...?
-
 model = Sequential()
 
 model.add(Cropping2D(cropping=((CONST.CROP_TOP, CONST.CROP_BOTTOM), (0, 0)), input_shape=(CONST.HEIGHT, CONST.WIDTH, CONST.CHANNELS)))
