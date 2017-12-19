@@ -46,7 +46,7 @@ GENERATOR_BATCH_SIZE = 30 # Outputs batches of 30 * 6 = 180 images (augmented)
 
 # HYPERPARAMS:
 
-EPOCHS = 16
+EPOCHS = 24
 
 
 # MODEL FILE:
