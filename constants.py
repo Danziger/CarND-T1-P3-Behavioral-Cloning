@@ -82,4 +82,4 @@ EPOCHS = 12
 
 MODEL_PREFIX = './model-'
 MODEL_EXTENSION = '.h5'
-MODEL_FILE = './model-beach-pre-analysis.h5'
+MODEL_FILE = './model-mountain-pre-analysis.h5'
