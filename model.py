@@ -16,16 +16,7 @@ import utils
 
 # LOAD SAMPLES:
 
-samples = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_FILE, [
-    CONST.BEACH_4_ANTICLOCK_FILE,
-    CONST.BEACH_4_CLOCK_FILE,
-    CONST.RECO_BEACH_1_ANTICLOCK_FILE,
-    CONST.RECO_BEACH_1_CLOCK_FILE,
-    CONST.MOUNTAIN_4_ANTICLOCK_FILE,
-    CONST.MOUNTAIN_4_CLOCK_FILE,
-    CONST.RECO_MOUNTAIN_1_ANTICLOCK_FILE,
-    CONST.RECO_MOUNTAIN_1_CLOCK_FILE
-])
+samples = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_FILE, CONST.BEACH_DATA_FILES)
 
 
 # TRAIN/VALIDATION SPLITS:
@@ -142,15 +133,15 @@ model.add(Dense(1))
 
 model.compile(loss='mse', optimizer=Adam(lr=0.0005))
 
-checkpoint = ModelCheckpoint(CONST.MODEL_PREFIX + '{epoch:03d}.h5')
+# checkpoint = ModelCheckpoint(CONST.MODEL_PREFIX + '{epoch:03d}.h5')
 
 history = model.fit_generator(
     train_generator,
     samples_per_epoch=TRAIN_SAMPLES_COUNT,
     validation_data=validation_generator,
     nb_val_samples=VALIDATION_SAMPLES_COUNT,
-    nb_epoch=CONST.EPOCHS,
-    callbacks=[checkpoint]
+    nb_epoch=CONST.EPOCHS
+    # callbacks=[checkpoint]
 )
 
 
@@ -166,10 +157,13 @@ print(model.summary())
 
 # PLOT:
 
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('model mean squared error loss')
-plt.ylabel('mean squared error loss')
-plt.xlabel('epoch')
-plt.legend(['training set', 'validation set'], loc='upper right')
-plt.show()
+print(history.history['loss'])
+print(history.history['val_loss'])
+
+# plt.plot()
+# plt.plot()
+# plt.title('model mean squared error loss')
+# plt.ylabel('mean squared error loss')
+# plt.xlabel('epoch')
+# plt.legend(['training set', 'validation set'], loc='upper right')
+# plt.show()

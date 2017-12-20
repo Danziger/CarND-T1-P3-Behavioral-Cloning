@@ -3,30 +3,63 @@ import matplotlib.pyplot as plt
 import constants as CONST
 import utils
 
-samples = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_FILE, [
+
+# LOAD DATA:
+
+# Track 1 (Beach):
+
+samples_beach = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_FILE, [
     CONST.BEACH_4_ANTICLOCK_FILE,
     CONST.BEACH_4_CLOCK_FILE,
     CONST.RECO_BEACH_1_ANTICLOCK_FILE,
-    CONST.RECO_BEACH_1_CLOCK_FILE,
+    CONST.RECO_BEACH_1_CLOCK_FILE
+])
+
+# Track 2 (Mountain):
+
+samples_mountain = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_FILE, [
     CONST.MOUNTAIN_4_ANTICLOCK_FILE,
     CONST.MOUNTAIN_4_CLOCK_FILE,
     CONST.RECO_MOUNTAIN_1_ANTICLOCK_FILE,
     CONST.RECO_MOUNTAIN_1_CLOCK_FILE
 ])
 
-all = []
 
-angles = list(map(lambda sample: sample["steering"], samples))
+# EXTRACT ANGLES:
 
-all.extend(angles)
-all.extend(map(lambda angle: -angle, angles))
+angles_beach = list(map(lambda sample: sample["steering"], samples_beach))
+angles_mountain = list(map(lambda sample: sample["steering"], samples_mountain))
+angles_all = angles_beach + angles_mountain
 
-all.extend(list(map(lambda angle: angle + 0.25, angles)))
-all.extend(list(map(lambda angle: angle - 0.25, angles)))
-all.extend(list(map(lambda angle: - (angle + 0.25), angles)))
-all.extend(list(map(lambda angle: - (angle - 0.25), angles)))
 
-plt.hist(all)
+# PLOT:
+
+plt.hist([angles_beach, angles_mountain, angles_all])
+plt.legend(['Beach', 'Mountain', 'Both'], loc='upper right')
 plt.show()
 
-# TODO: Add plots for each track, both tracks, each track recovery and both track recovery, 6 in total
+
+# CALCULATE DISTRIBUTION AFTER USING SIDE CAMERAS AND MIRRORING AUGMENTATION:
+
+angles_beach_augmented = angles_beach \
+                         + list(map(lambda angle: -angle, angles_beach)) \
+                         + list(map(lambda angle: angle + 0.25, angles_beach)) \
+                         + list(map(lambda angle: angle - 0.25, angles_beach)) \
+                         + list(map(lambda angle: - (angle + 0.25), angles_beach)) \
+                         + list(map(lambda angle: - (angle - 0.25), angles_beach))
+
+angles_mountain_augmented = angles_mountain \
+                         + list(map(lambda angle: -angle, angles_mountain)) \
+                         + list(map(lambda angle: angle + 0.25, angles_mountain)) \
+                         + list(map(lambda angle: angle - 0.25, angles_mountain)) \
+                         + list(map(lambda angle: - (angle + 0.25), angles_mountain)) \
+                         + list(map(lambda angle: - (angle - 0.25), angles_mountain))
+
+angles_all_augmented = angles_beach_augmented + angles_mountain_augmented
+
+
+# PLOT:
+
+plt.hist([angles_beach, angles_beach_augmented, angles_mountain, angles_mountain_augmented, angles_all, angles_all_augmented])
+plt.legend(['Beach', 'Beach Augmented', 'Mountain', 'Mountain Augmented', 'Both', 'Both Augmented'], loc='upper right')
+plt.show()
