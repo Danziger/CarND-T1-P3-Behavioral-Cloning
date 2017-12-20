@@ -75,11 +75,11 @@ GENERATOR_BATCH_SIZE = 30 # Outputs batches of 30 * 6 = 180 images (augmented)
 
 # HYPERPARAMS:
 
-EPOCHS = 12
+EPOCHS = 24
 
 
 # MODEL FILE:
 
 MODEL_PREFIX = './model-'
 MODEL_EXTENSION = '.h5'
-MODEL_FILE = './model-mountain-pre-analysis.h5'
+MODEL_FILE = './model-both-pre-analysis.h5'
