@@ -25,7 +25,7 @@ all_samples = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_FILE, 
 
 train_samples, validation_samples = train_test_split(all_samples, test_size=CONST.TEST_SIZE)
 
-TRAIN_SAMPLES_COUNT = utils.calculate_augmented_size(train_samples, CONST.ANGLE_CORRECTION, CONST.SKIP_FILTER)
+TRAIN_SAMPLES_COUNT = utils.calculate_augmented_size(train_samples, CONST.ANGLE_CORRECTION, CONST.BEACH_FILTER)
 VALIDATION_SAMPLES_COUNT = utils.calculate_augmented_size(validation_samples, CONST.ANGLE_CORRECTION, CONST.SKIP_FILTER)
 
 
@@ -60,7 +60,7 @@ def generator(samples, batch_size=CONST.GENERATOR_BATCH_SIZE, filter=CONST.SKIP_
 
 # DATASETS GENERATORS:
 
-train_generator = generator(train_samples, batch_size=CONST.GENERATOR_BATCH_SIZE, filter=CONST.SKIP_FILTER)
+train_generator = generator(train_samples, batch_size=CONST.GENERATOR_BATCH_SIZE, filter=CONST.BEACH_FILTER)
 validation_generator = generator(validation_samples, batch_size=CONST.GENERATOR_BATCH_SIZE)
 
 
