@@ -18,7 +18,7 @@ import utils
 
 # LOAD SAMPLES:
 
-all_samples = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_FILE, CONST.BEACH_DATA_FILES)
+all_samples = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_FILE, [CONST.BEACH_EXAMPLE_FILE])
 
 
 # TRAIN/VALIDATION SPLITS:
