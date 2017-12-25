@@ -111,19 +111,57 @@ For details about this issue and how I created the training data, see the next s
 
 #### 1. Solution Design Approach
 
-The overall strategy for deriving a model architecture was to ...
+The overall strategy for deriving a model architecture was to implement the architecture from NVIDIA as designed by them
+and add small modifications to it in order to prevent overfitting and adapt it to the project's needs.
 
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
+My first step was to use a simple one-fully-connected-layer neural network model as we saw throw the course, just ot get
+familiar with Keras first.
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting.
+The first addition to this were the Cropping2D and Lambda layers, to remove irrelevant data from the images (hood and
+sky) and normalize the data, respectively.
 
-To combat the overfitting, I modified the model so that ...
+At this point, I was training the model for just 6 epochs and using only the center camera of the example data, as I
+wasn't really trying to obtain a valid model from this architecture.
 
-Then I ...
+Next, I replaced my only fully-connected layer with NVIDIA's architecture, as suggested thought the course. I think this
+model might be appropriate because the problem they were trying to solve is quite similar to ours and I trust NVIDIA as
+a reliable source of knowledge and relevant information. I also started training for 8 epochs.
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
+In order to gauge how well the model was working, I split my image and steering angle data into a training and
+validation set. I found that my the mean squared error would decrease quite fast and then start bouncing back and forth
+continiously, so probably the initial learning rate was too big. I first tried decreasing it from the default of 0.001
+to 0.0001, but it was now too slow. I finally used 0.0005 (half the default). After doing this, I also increased the
+epochs from 8 to 12.
 
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
+The next problem I found was that I had a low mean squared error on the training set but a high mean squared error on the
+validation set. This implied that the model was overfitting. To combat it, I modified the model introducing Dropout
+layers, as I did in the previous project. However, this time the difference was not as big as before and also the mean
+squared error was decreasing slower, so I would have to increase the epochs. Instead, I took a look to some discussions
+around that topic in the forums and Slack channels and, after reading various online articles and Medium posts about
+regularization and dropout, I decided to give the former a try, so I added L2 regularization to all my convolutional and
+fully-connected layers (except the last one).
+
+This reduced the overfitting and generated a model that was driving smoothly the first long turn of the track and the
+next one, but crashing into the bridge. I then decided to use the images from all 3 cameras and flip them horizontally
+as well, so the dataset would now be 6 times bigger. This got the car a bit further, just across the bridge, but it
+crashed in the next turn, so I decided to record my own data, including full laps and recovery data in both directions
+and for both circuits.
+
+At the end of the process, the vehicle is able to drive autonomously around both tracks, but with different models
+trained specifically for each of them. When merging the data of both circuits together it will fail in both.
+
+# TODO: Talk about the data analyris and that stuff...
+
+# TODO: Also, after this augmentation it was worse than using example data. maybe not all augmentations are realistic or
+# are not the most valuable ones (shift?)
+
+I tried augmenting the data in some other ways (brightness, contrast, sharpenes...) but this didn't help, so after
+spending some more time on this without success, I decided to submit the old model that would only drive on the firs
+track.
+
+I will go into greater detail about this problem in the last section, as this problem is mainly related with the data
+I recorded. Therefore, augmenting it won't help to generate a better model, as the original data used to create the
+augmented one is already "corrupted" or just wrong.
 
 
 #### 2. Final Model Architecture
@@ -211,3 +249,6 @@ I finally randomly shuffled the data set and put Y% of the data into a validatio
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
 # TODO: Mention augmentation using Carla or shifting the images..
+
+# TODO: Mention racing lines will make the model not know how to react near the border unless much more recovery data than normal data has
+# been recorded, which is actually the other way around...
