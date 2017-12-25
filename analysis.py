@@ -1,4 +1,7 @@
 import matplotlib.pyplot as plt
+import math
+
+from sklearn.model_selection import train_test_split
 
 import constants as CONST
 import utils
@@ -48,6 +51,18 @@ angles_beach_augmented = angles_beach \
                          + list(map(lambda angle: - (angle + 0.25), angles_beach)) \
                          + list(map(lambda angle: - (angle - 0.25), angles_beach))
 
+super_beach = angles_beach_augmented + []
+
+for angle in angles_beach_augmented:
+    times = math.ceil(10 * abs(angle))
+
+    if times > 5:
+        super_beach += [angle] * times
+
+
+print('Super Beach # = %d' % len(super_beach))
+
+
 angles_mountain_augmented = angles_mountain \
                          + list(map(lambda angle: -angle, angles_mountain)) \
                          + list(map(lambda angle: angle + 0.25, angles_mountain)) \
@@ -55,11 +70,19 @@ angles_mountain_augmented = angles_mountain \
                          + list(map(lambda angle: - (angle + 0.25), angles_mountain)) \
                          + list(map(lambda angle: - (angle - 0.25), angles_mountain))
 
-angles_all_augmented = angles_beach_augmented + angles_mountain_augmented
+super_mountain = angles_mountain_augmented + []
 
+for angle in angles_mountain_augmented:
+    times = math.ceil(5 * abs(angle))
+
+    if times > 5:
+        super_mountain += [angle] * times
+
+angles_all_augmented = angles_beach_augmented + angles_mountain_augmented
+super_all = super_beach + super_mountain
 
 # PLOT:
 
-plt.hist([angles_beach, angles_beach_augmented, angles_mountain, angles_mountain_augmented, angles_all, angles_all_augmented])
-plt.legend(['Beach', 'Beach Augmented', 'Mountain', 'Mountain Augmented', 'Both', 'Both Augmented'], loc='upper right')
+plt.hist([angles_beach, angles_beach_augmented, super_beach, angles_mountain, angles_mountain_augmented, super_mountain, angles_all, angles_all_augmented, super_all])
+plt.legend(['Beach', 'Beach Augmented', 'Super Beach', 'Mountain', 'Mountain Augmented', 'Super Mountain', 'Both', 'Both Augmented', 'Super Both'], loc='upper right')
 plt.show()

@@ -1,4 +1,6 @@
 import cv2
+import math
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -16,21 +18,26 @@ import utils
 
 # LOAD SAMPLES:
 
-samples = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_FILE, CONST.ALL_DATA_FILES)
+all_samples = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_FILE, CONST.BEACH_DATA_FILES)
 
 
 # TRAIN/VALIDATION SPLITS:
 
-train_samples, validation_samples = train_test_split(samples, test_size=CONST.TEST_SIZE)
+train_samples, validation_samples = train_test_split(all_samples, test_size=CONST.TEST_SIZE)
 
-TRAIN_SAMPLES_COUNT = len(train_samples) * 6
-VALIDATION_SAMPLES_COUNT = len(validation_samples) * 6
+TRAIN_SAMPLES_COUNT = utils.calculate_augmented_size(train_samples, CONST.ANGLE_CORRECTION, CONST.SKIP_FILTER)
+VALIDATION_SAMPLES_COUNT = utils.calculate_augmented_size(validation_samples, CONST.ANGLE_CORRECTION, CONST.SKIP_FILTER)
 
+
+# print('Train samples = %d, count = %d' % (len(train_samples), TRAIN_SAMPLES_COUNT))
 
 # IMAGE GENERATOR:
+# Will not artificially augment validation dat aset with methods other than flipping and using all 3 cameras.
 
-def generator(samples, batch_size=CONST.GENERATOR_BATCH_SIZE):
+def generator(samples, batch_size=CONST.GENERATOR_BATCH_SIZE, filter=CONST.SKIP_FILTER):
     num_samples = len(samples)
+
+    # TODO Update this?
 
     while True: # Loop forever so the generator never terminates
 
@@ -43,57 +50,7 @@ def generator(samples, batch_size=CONST.GENERATOR_BATCH_SIZE):
             angles = []
 
             for batch_sample in batch_samples:
-                # Names:
-
-                # name_center = CONST.IMG_DIR + batch_sample[0].replace('\\', '/').split('/')[-1]
-                # name_left = CONST.IMG_DIR + batch_sample[1].replace('\\', '/').split('/')[-1]
-                # name_right = CONST.IMG_DIR + batch_sample[2].replace('\\', '/').split('/')[-1]
-
-                name_center = batch_sample["center"]
-                name_left = batch_sample["left"]
-                name_right = batch_sample["right"]
-
-                # Center Image:
-
-                image_center_bgr = cv2.imread(name_center)
-                image_center = cv2.cvtColor(image_center_bgr, cv2.COLOR_BGR2YUV)
-                # image_center = image_center[...,::-1]
-                angle_center = batch_sample["steering"]
-                images.append(image_center)
-                angles.append(angle_center)
-
-                image_center_flip = np.fliplr(image_center)
-                angle_center_flip = -angle_center
-                images.append(image_center_flip)
-                angles.append(angle_center_flip)
-
-                # Left Image:
-
-                image_left_bgr = cv2.imread(name_left)
-                image_left = cv2.cvtColor(image_left_bgr, cv2.COLOR_BGR2YUV)
-                # image_left = image_center[...,::-1]
-                angle_left = angle_center + CONST.ANGLE_CORRECTION
-                images.append(image_left)
-                angles.append(angle_left)
-
-                image_left_flip = np.fliplr(image_left)
-                angle_left_flip = -angle_left
-                images.append(image_left_flip)
-                angles.append(angle_left_flip)
-
-                # Right Image:
-
-                image_right_bgr = cv2.imread(name_right)
-                image_right = cv2.cvtColor(image_right_bgr, cv2.COLOR_BGR2YUV)
-                # image_right = image_center[...,::-1]
-                angle_right = angle_center - CONST.ANGLE_CORRECTION
-                images.append(image_right)
-                angles.append(angle_right)
-
-                image_right_flip = np.fliplr(image_right)
-                angle_right_flip = -angle_right
-                images.append(image_right_flip)
-                angles.append(angle_right_flip)
+                utils.get_samples(images, angles, batch_sample, CONST.ANGLE_CORRECTION, filter)
 
             X_train = np.array(images)
             y_train = np.array(angles)
@@ -103,7 +60,7 @@ def generator(samples, batch_size=CONST.GENERATOR_BATCH_SIZE):
 
 # DATASETS GENERATORS:
 
-train_generator = generator(train_samples, batch_size=CONST.GENERATOR_BATCH_SIZE)
+train_generator = generator(train_samples, batch_size=CONST.GENERATOR_BATCH_SIZE, filter=CONST.SKIP_FILTER)
 validation_generator = generator(validation_samples, batch_size=CONST.GENERATOR_BATCH_SIZE)
 
 

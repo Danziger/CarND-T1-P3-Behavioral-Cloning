@@ -1,3 +1,6 @@
+import math
+
+
 # DATA FILES:
 
 DATA_DIR = './data/'
@@ -51,7 +54,7 @@ HEIGHT = 160
 
 # DATA SPLIT:
 
-TEST_SIZE = 0.2
+TEST_SIZE = 0.3
 
 
 # DATA AUGMENTATION:
@@ -83,3 +86,12 @@ EPOCHS = 24
 MODEL_PREFIX = './model-'
 MODEL_EXTENSION = '.h5'
 MODEL_FILE = './model-both-pre-analysis.h5'
+
+
+def BEACH_FILTER(angle):
+    times = math.ceil(10 * abs(angle))
+
+    return times if times > 5 else False
+
+def SKIP_FILTER(angle):
+    return False
