@@ -85,7 +85,7 @@ EPOCHS = 24
 
 MODEL_PREFIX = './model-'
 MODEL_EXTENSION = '.h5'
-MODEL_FILE = './model-both-pre-analysis.h5'
+MODEL_FILE = './model.h5'
 
 
 def BEACH_FILTER(angle):
