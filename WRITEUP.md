@@ -98,13 +98,10 @@ As suggested through the course, my model architecture is based on the one from
 The only two changes made to it have been, on one hand, the addition of a Cropping2D layer (`model.py:76`) in order to
 remove irrelevant portions of the image using the GPU instead of doing it with the processor and, on the other hand, the
 addition of L2 regularization and ELU activation layers (`model.py:78-88`) to prevent overfitting and introduce
-nonlinearity, respectively. Both have been used instead of Dropout layers and RELU activation layers after reading some
-discussions on the forums/slack channels, various articles comparing different alternative methods and trial and error,
-as we will see in greater detail the following sections.
+nonlinearity, respectively.
 
-We will look into them in greater detail in the next sections.
-
-# TODO: Add references to this or explain details.
+ELU should make learning faster than ReLU as has a mean closer to 0 and L2 regularization is an analyticsl alternative
+to dropout, which randomly turns on and off neurons while training.
 
 
 #### 2. Attempts to reduce overfitting in the model
