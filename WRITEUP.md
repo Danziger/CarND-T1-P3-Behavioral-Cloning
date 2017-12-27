@@ -1,9 +1,19 @@
-CarND · T1 · P3 · Behavioral Cloning
-====================================
+CarND · T1 · P3 · Behavioral Cloning Writeup
+============================================
+
+First of all, the results of the project can be found in YouTube:
+
+1. [Beach data on beach track at 20](https://www.youtube.com/watch?v=2aQ2ddly7Y8)
+2. [Both data on beach track at 20 (crash)](https://www.youtube.com/watch?v=njMM31ynCVM)
+3. [Both data on beach track at 15](https://www.youtube.com/watch?v=BdSZWsjF4zA)
+4. [Both data on mountain track at 15 (crash)](https://www.youtube.com/watch?v=oX7vcNPxgU0)
+5. [Both data on mountain track at 10 (crash)](https://www.youtube.com/watch?v=uaukR5QKSSk)
+6. [Mountain data on mountain track at 15](https://www.youtube.com/watch?v=FRqvp0jG8tc)
+
 
 [//]: # (Image References)
 
-[image1]: ./output/images/001%20-%20All%20Signs.png "All Signs"
+[image1]: ./output/images/001%20-%20NVIDIA%20CNN.png "NVIDIA CNN"
 
 [sign1]: ./input/images/resized/001%20-%20Yield.jpg "Yield"
 
@@ -22,7 +32,8 @@ The goals / steps of this project are the following:
 Rubric Points
 -------------
 
-Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.
+Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how
+I addressed each point in my implementation.
 
 
 ### FILES SUBMITTED & CODE QUALITY
@@ -31,22 +42,28 @@ Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/4
 
 My project includes the following files:
 
-* `model.py`: Containing the script to create and train the model. Some functionality has been extracted to separated files: `utils.py` and `constants.py`.
+* `model.py`: Containing the script to create and train the model. Some functionality has been extracted to separated
+files: `utils.py` and `constants.py`.
 
-* `drive.py`: For driving the car in autonomous mode. The only change here has been to convert the images to YUV, as the training was done with YUV images, and increasing the default speed of 9 to either 10, 15 or 20 in order to generate the various videos with a higher driving speed.
+* `drive.py`: For driving the car in autonomous mode. The only change here has been to convert the images to YUV, as the
+training was done with YUV images, and increasing the default speed of 9 to either 10, 15 or 20 in order to generate the
+various videos with a higher driving speed.
 
-* `models/`: Multiple videos have been provided for demonstrational purposes. The relevant one for the evaluation is `beach.h5`.
+* `models/`: Multiple videos have been provided for demonstrational purposes. The relevant one for the evaluation is
+`beach.h5`.
 
-* `output/videos/`: Multiple videos have been provided for demonstrational purposes. The relevant one for the evaluation is `beach-data-beach-track-20-ok`.
+* `output/videos/`: Multiple videos have been provided for demonstrational purposes. The relevant one for the evaluation
+is `both-data-beach-track-15-ok` (https://www.youtube.com/watch?v=BdSZWsjF4zA).
 
 * `WRITEUP.md` summarizing the results.
 
-* `analysis.py`, `examples.py` and `plot.py` were used to generate verious images for the write up.
+* `analysis.py`, `examples.py` and `plot.py` were used to generate various images for the write up.
 
 
 #### 2. Submission includes functional code
 
-Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the first track by executing:
+Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the first track by
+executing:
 
 ```sh
 python drive.py ../models/beach.h5
@@ -62,7 +79,9 @@ The other models are there just for demonstrational purposes, but can also be us
 
 #### 3. Submission code is usable and readable
 
-The `model.py` file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, logs its layers, as well as saving a diagram of it, and it contains comments to explain how the code works.
+The `model.py` file contains the code for training and saving the convolution neural network. The file shows the
+pipeline I used for training and validating the model, logs its layers, as well as saving a diagram of it, and it
+contains comments to explain how the code works.
 
 Some of the functionality has been extracted to `utils.py` and `constants.py`, so comments can also be found there.
 
@@ -71,59 +90,46 @@ Some of the functionality has been extracted to `utils.py` and `constants.py`, s
 
 #### 1. An appropriate model architecture has been employed
 
-# TODO model-ok info?
-
-# TODO: Add NVIDIA image
-
 As suggested through the course, my model architecture is based on the one from
-[NVIDIA](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/), with the only changes being:
+[NVIDIA](https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/):
 
-- The addition of a Cropping2D layer (TODO code line 18) in order to remove irrelevant portions of the image using the GPU instead of doing
-  with the processor.
+![NVIDIA CNN][image1]
 
-- The addition of a Lambda layer (TODO code line 18) to normalize (`Lambda(lambda x: (x / 255.0) - 0.5)`) the data, again, using the GPU.
+The only two changes made to it have been, on one hand, the addition of a Cropping2D layer (`model.py:76`) in order to
+remove irrelevant portions of the image using the GPU instead of doing it with the processor and, on the other hand, the
+addition of L2 regularization and ELU activation layers (`model.py:78-88`) to prevent overfitting and introduce
+nonlinearity, respectively. Both have been used instead of Dropout layers and RELU activation layers after reading some
+discussions on the forums/slack channels, various articles comparing different alternative methods and trial and error,
+as we will see in greater detail the following sections.
 
-- The addition of L2 regularization and ELU activation layers (TODO starting at code line 18) to prevent overfitting
-  and introduce nonlinearity, respectively. Both have been used instead of Dropout layers and RELU
-  activation layers after reading some discussions on the forums/slack channels, various articles comparing different
-  alternative methods and trial and error, as we will see in greater detail the following sections.
+We will look into them in greater detail in the next sections.
+
+# TODO: Add references to this or explain details.
 
 
 #### 2. Attempts to reduce overfitting in the model
 
 The model contains L2 regularization in all convolutional and fully-connected layers (except the last one) in order to
-reduce overfitting (TODO: model.py lines 21).
+reduce overfitting (`model.py:78-88`).
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (TODO: code line 10-16).
-The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets to ensure that the model was not overfitting (`model.py:21`).
+The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track, as it
+can be seen in the videos listed at the top of this document.
 
 
 #### 3. Model parameter tuning
 
-The model used an Adam optimizer, so the learning rate was not tuned manually (model.py line 25). However, the initial
-learning rate have been reduced from the default 0.001 to 0.0005 (half the default).
+The model used an Adam optimizer, so the learning rate was not tuned manually (`model.py:95`). However, the initial
+learning rate have been reduced from the default `0.001` to `0.0005` (half the default) by trial and error as we will
+see later.
 
-# TODO: Explain the process 0.001 -> 0.0001 -> 0.0005
-
-# TODO: Add code lines in general!
+Also, the L2 regularization param has also been adjusted by trial and error (`model.py:78-88`).
 
 
 #### 4. Appropriate training data
 
-New training data was recorded to keep the vehicle driving on the road, using the mouse to progressively steer it,
-generating smother data. This new training data includes both normal laps and recovery data, both recorded in both
-directions.
-
-The images from all 3 cameras have been used and all that data have been augmented using various methods, from simple
-ones like flipping the images horizontally and changing the sign of the angle, to more advanced ones like changing the
-brightness, contrast or sharpness of the images.
-
-It's worth mentioning that the performance of the model is still not amazing mainly due to the way the full laps were
-recorded, as instead of doing center lane driving I tried to follow racing lines, which won't help the model drive
-properly with this kind of neural network (it won't be able to drive properly nor on the center of the lane nor
-following racing lines as I did).
-
-For details about this issue and how I created the training data, see the next section.
+All the details about how the training data was obtained and augmented, as well as the issues with it and possibles ways
+to improve it can be found in the last point of the next section.
 
 
 ### ARCHITECTURE, TRAINING DOCUMENTATION & POSSIBLE IMPROVEMENTS
@@ -184,7 +190,9 @@ I will go into greater detail about this problem in the last section, as this pr
 I recorded. Therefore, augmenting it won't help to generate a better model, as the original data used to create the
 augmented one is already "corrupted" or just wrong.
 
-# Shit in, shit out
+# TODO: Shit in, shit out
+
+# TODO model-ok info?
 
 
 
@@ -279,3 +287,24 @@ I used this training data for training the model. The validation set helped dete
 
 # TODO: Mention racing lines will make the model not know how to react near the border unless much more recovery data than normal data has
 # been recorded, which is actually the other way around...
+
+
+
+
+New training data was recorded to keep the vehicle driving on the road, using the mouse to progressively steer it,
+generating smother data, as we can see in this portion of one of the CSV files:
+
+# TODO: Add CSV
+
+This new training data includes both normal laps and recovery data, both recorded in both directions.
+
+The images from all 3 cameras have been used and all that data have been augmented using various methods, from simple
+ones like flipping the images horizontally and changing the sign of the angle, to more advanced ones like changing the
+brightness, contrast or sharpness of the images.
+
+It's worth mentioning that the performance of the model is still not amazing mainly due to the way the full laps were
+recorded, as instead of doing center lane driving I tried to follow racing lines, which won't help the model drive
+properly with this kind of neural network (it won't be able to drive properly nor on the center of the lane nor
+following racing lines as I did).
+
+For details about this issue and how I created the training data, see the next section.
