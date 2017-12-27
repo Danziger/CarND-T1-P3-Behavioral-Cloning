@@ -1,58 +1,73 @@
-# **Behavioral Cloning**
-
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
-
-**Behavioral Cloning Project**
-
-The goals / steps of this project are the following:
-* Use the simulator to collect data of good driving behavior
-* Build, a convolution neural network in Keras that predicts steering angles from images
-* Train and validate the model with a training and validation set
-* Test that the model successfully drives around track one without leaving the road
-* Summarize the results with a written report
-
+CarND · T1 · P3 · Behavioral Cloning
+====================================
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
+[image1]: ./output/images/001%20-%20All%20Signs.png "All Signs"
 
-## Rubric Points
-### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.
+[sign1]: ./input/images/resized/001%20-%20Yield.jpg "Yield"
 
----
-### TODO: Files Submitted & Code Quality
 
-#### TODO: 1. Submission includes all required files and can be used to run the simulator in autonomous mode
+Project Goals
+-------------
+
+The goals / steps of this project are the following:
+* Use the simulator to collect data of good driving behavior.
+* Build, a convolution neural network in Keras that predicts steering angles from images.
+* Train and validate the model with a training and validation set.
+* Test that the model successfully drives around track one without leaving the road.
+* Summarize the results with a written report.
+
+
+Rubric Points
+-------------
+
+Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.
+
+
+### FILES SUBMITTED & CODE QUALITY
+
+#### 1. Submission includes all required files and can be used to run the simulator in autonomous mode.
 
 My project includes the following files:
-* model.py containing the script to create and train the model
-* drive.py for driving the car in autonomous mode
-* model.h5 containing a trained convolution neural network
-* writeup_report.md or writeup_report.pdf summarizing the results
+
+* `model.py`: Containing the script to create and train the model. Some functionality has been extracted to separated files: `utils.py` and `constants.py`.
+
+* `drive.py`: For driving the car in autonomous mode. The only change here has been to convert the images to YUV, as the training was done with YUV images, and increasing the default speed of 9 to either 10, 15 or 20 in order to generate the various videos with a higher driving speed.
+
+* `models/`: Multiple videos have been provided for demonstrational purposes. The relevant one for the evaluation is `beach.h5`.
+
+* `output/videos/`: Multiple videos have been provided for demonstrational purposes. The relevant one for the evaluation is `beach-data-beach-track-20-ok`.
+
+* `WRITEUP.md` summarizing the results.
+
+* `analysis.py`, `examples.py` and `plot.py` were used to generate verious images for the write up.
 
 
-#### 2. TODO: Submission includes functional code
-Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing
+#### 2. Submission includes functional code
+
+Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the first track by executing:
+
 ```sh
-python drive.py model.h5
+python drive.py ../models/beach.h5
 ```
 
-#### 3. TODO: Submission code is usable and readable
+To drive it on the second track use:
+```sh
+python drive.py ../models/mountain.h5
+```
 
-The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
+The other models are there just for demonstrational purposes, but can also be used with that same command.
 
 
-### Model Architecture and Training Strategy
+#### 3. Submission code is usable and readable
+
+The `model.py` file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, logs its layers, as well as saving a diagram of it, and it contains comments to explain how the code works.
+
+Some of the functionality has been extracted to `utils.py` and `constants.py`, so comments can also be found there.
+
+
+### MODEL ARCHITECTURE AND TRAINING STRATEGY
 
 #### 1. An appropriate model architecture has been employed
 
@@ -111,7 +126,7 @@ following racing lines as I did).
 For details about this issue and how I created the training data, see the next section.
 
 
-### Model Architecture, Training Strategy and Possible Improvements
+### ARCHITECTURE, TRAINING DOCUMENTATION & POSSIBLE IMPROVEMENTS
 
 #### 1. Solution Design Approach
 
