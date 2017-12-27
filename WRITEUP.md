@@ -103,6 +103,7 @@ nonlinearity, respectively.
 ELU should make learning faster than ReLU as has a mean closer to 0 and L2 regularization is an analyticsl alternative
 to dropout, which randomly turns on and off neurons while training.
 
+It's worth mentioning that the dimensions of the layers also change in order to accomodate the generated images, which are `160px × 320px` originally and `65px × 320px` after cropping them.
 
 #### 2. Attempts to reduce overfitting in the model
 
@@ -194,14 +195,163 @@ TODO model-ok info?
 
 #### 2. Final Model Architecture
 
-TODO: Polish code first, then continue with writeup adding lines and finishing following sections and then polish all, before adding graphics.
+The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes:
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
+<table>
+    <tr>
+        <th>LAYER</th>
+        <th>NAME</th>
+        <th>IN. SIZE</th>
+        <th>OUT. SIZE</th>
+        <th>DESCRIPTION</th>
+    </tr>
+    <tr>
+        <td>Cropping2D</td>
+        <td>cropping2d_1</td>
+        <td>`160 × 320 × 3`</td>
+        <td>`65 × 320 × 3`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Lambda</td>
+        <td>lambda_1</td>
+        <td>`65 × 320 × 3`</td>
+        <td>`65 × 320 × 3`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Convolution2D</td>
+        <td>convolution2d_1</td>
+        <td>`65 × 320 × 3`</td>
+        <td>`31 × 158 × 24`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>ELU</td>
+        <td>-</td>
+        <td>`31 × 158 × 24`</td>
+        <td>`31 × 158 × 24`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Convolution2D</td>
+        <td>convolution2d_2</td>
+        <td>`31 × 158 × 24`</td>
+        <td>`14 × 77 × 36`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>ELU</td>
+        <td>-</td>
+        <td>`14 × 77 × 36`</td>
+        <td>`14 × 77 × 36`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Convolution2D</td>
+        <td>convolution2d_3</td>
+        <td>`14 × 77 × 36`</td>
+        <td>`5 × 37 × 48`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>ELU</td>
+        <td>-</td>
+        <td>`5 × 37 × 48`</td>
+        <td>`5 × 37 × 48`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Convolution2D</td>
+        <td>convolution2d_4</td>
+        <td>`5 × 37 × 48`</td>
+        <td>`3 × 35 × 64`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>ELU</td>
+        <td>-</td>
+        <td>`3 × 35 × 64`</td>
+        <td>`3 × 35 × 64`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Convolution2D</td>
+        <td>convolution2d_5</td>
+        <td>`3 × 35 × 64`</td>
+        <td>`1 × 33 × 64`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>ELU</td>
+        <td>-</td>
+        <td>`1 × 33 × 64`</td>
+        <td>`1 × 33 × 64`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Flatten</td>
+        <td>flatten_1</td>
+        <td>`1 × 33 × 64`</td>
+        <td>`2112`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Dense</td>
+        <td>dense_1</td>
+        <td>`2112`</td>
+        <td>`100`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>ELU</td>
+        <td>-</td>
+        <td>`100`</td>
+        <td>`100`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Dense</td>
+        <td>dense_2</td>
+        <td>`100`</td>
+        <td>`50`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>ELU</td>
+        <td>-</td>
+        <td>`50`</td>
+        <td>`50`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Dense</td>
+        <td>dense_3</td>
+        <td>`50`</td>
+        <td>`10`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>ELU</td>
+        <td>-</td>
+        <td>`10`</td>
+        <td>`10`</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Dense</td>
+        <td>dense_4</td>
+        <td>`10`</td>
+        <td>`1`</td>
+        <td></td>
+    </tr>
+</table>
 
-![alt text][image1]
 
+
+
+Here is a visualization of the architecture:
 
 
 
