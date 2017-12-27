@@ -1,4 +1,6 @@
-# Behaviorial Cloning Project
+CarND · T1 · P3 · Behaviorial Cloning Project
+=============================================
+
 
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
@@ -127,10 +129,21 @@ A well written README file can enhance your project and portfolio.  Develop your
 Interesting reads
 =================
 
-- ADAM: A METHOD FOR STOCHASTIC OPTIMIZATION:
+- Adam: A Method For Stochastic Optimization:
 
   https://arxiv.org/pdf/1412.6980v9.pdf
 
 - An Analysis of the Regularization between L<sub>2</sub> and Dropout in Single Hidden Layer Neural Network.
 
   http://uksim.info/isms2016/CD/data/0665a174.pdf
+  
+- NVIDIA End-to-End Deep Learning for Self-Driving Cars
+
+  https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/
+  
+- ReLU vs ELU:
+
+  https://www.quora.com/How-does-ELU-activation-function-help-convergence-and-whats-its-advantages-over-ReLU-or-sigmoid-or-tanh-function
+  http://saikatbasak.in/sigmoid-vs-relu-vs-elu/
+  https://www.picalike.com/blog/2015/11/28/relu-was-yesterday-tomorrow-comes-elu/
+  

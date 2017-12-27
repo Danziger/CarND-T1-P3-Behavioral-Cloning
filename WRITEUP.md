@@ -172,12 +172,11 @@ and for both circuits.
 At the end of the process, the vehicle is able to drive autonomously around both tracks, but with different models
 trained specifically for each of them. When merging the data of both circuits together it will fail in both.
 
-# TODO: Talk about the data analyris and that stuff...
+TODO: Talk about the data analyris and that stuff...
 
-# TODO: Also, after this augmentation it was worse than using example data. maybe not all augmentations are realistic or
-# are not the most valuable ones (shift?)
+TODO: Also, after this augmentation it was worse than using example data. maybe not all augmentations are realistic or are not the most valuable ones (shift?)
 
-# TODO: ELU Vanishing gradient
+TODO: ELU Vanishing gradient
 
 I tried augmenting the data in some other ways (brightness, contrast, sharpenes...) but this didn't help, so after
 spending some more time on this without success, I decided to submit the old model that would only drive on the firs
@@ -187,16 +186,15 @@ I will go into greater detail about this problem in the last section, as this pr
 I recorded. Therefore, augmenting it won't help to generate a better model, as the original data used to create the
 augmented one is already "corrupted" or just wrong.
 
-# TODO: Shit in, shit out
+TODO: Shit in, shit out
 
-# TODO model-ok info?
+TODO model-ok info?
 
 
 
 #### 2. Final Model Architecture
 
-# TODO: Polish code first, then continue with writeup adding lines and finishing following sections and then polish all, before
-# adding graphics.
+TODO: Polish code first, then continue with writeup adding lines and finishing following sections and then polish all, before adding graphics.
 
 The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
 
@@ -280,10 +278,9 @@ I finally randomly shuffled the data set and put Y% of the data into a validatio
 
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
-# TODO: Mention augmentation using Carla or shifting the images..
+TODO: Mention augmentation using Carla or shifting the images..
 
-# TODO: Mention racing lines will make the model not know how to react near the border unless much more recovery data than normal data has
-# been recorded, which is actually the other way around...
+TODO: Mention racing lines will make the model not know how to react near the border unless much more recovery data than normal data has been recorded, which is actually the other way around...
 
 
 
@@ -291,7 +288,7 @@ I used this training data for training the model. The validation set helped dete
 New training data was recorded to keep the vehicle driving on the road, using the mouse to progressively steer it,
 generating smother data, as we can see in this portion of one of the CSV files:
 
-# TODO: Add CSV
+TODO: Add CSV
 
 This new training data includes both normal laps and recovery data, both recorded in both directions.
 
