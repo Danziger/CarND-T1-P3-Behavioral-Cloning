@@ -40,6 +40,7 @@ My project includes the following files:
 * model.h5 containing a trained convolution neural network
 * writeup_report.md or writeup_report.pdf summarizing the results
 
+
 #### 2. TODO: Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing
 ```sh
@@ -49,6 +50,7 @@ python drive.py model.h5
 #### 3. TODO: Submission code is usable and readable
 
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
+
 
 ### Model Architecture and Training Strategy
 
@@ -156,6 +158,8 @@ trained specifically for each of them. When merging the data of both circuits to
 
 # TODO: Also, after this augmentation it was worse than using example data. maybe not all augmentations are realistic or
 # are not the most valuable ones (shift?)
+
+# TODO: ELU Vanishing gradient
 
 I tried augmenting the data in some other ways (brightness, contrast, sharpenes...) but this didn't help, so after
 spending some more time on this without success, I decided to submit the old model that would only drive on the firs

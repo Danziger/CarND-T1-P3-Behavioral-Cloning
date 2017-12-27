@@ -3,7 +3,7 @@ import math
 
 # DATA FILES:
 
-DATA_DIR = './data/'
+DATA_DIR = '../data/'
 IMG_DIR = '/IMG/'
 
 LOG_FILE = '/driving_log.csv'
@@ -54,7 +54,7 @@ HEIGHT = 160
 
 # DATA SPLIT:
 
-TEST_SIZE = 0.3
+TEST_SIZE = 0.2
 
 
 # DATA AUGMENTATION:
@@ -83,10 +83,10 @@ EPOCHS = 16
 
 # MODEL FILE:
 
-MODEL_PREFIX = './model-'
+MODEL_PREFIX = '../models/model-'
 MODEL_EXTENSION = '.h5'
-MODEL_FILE = './model.h5'
-
+MODEL_FILE = '../models/model.h5'
+MODEL_DIAGRAM_FILE = '../model.png'
 
 def BEACH_FILTER(angle):
     times = math.ceil(10 * abs(angle))

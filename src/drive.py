@@ -54,15 +54,19 @@ def telemetry(sid, data):
     if data:
         # The current steering angle of the car
         steering_angle = data["steering_angle"]
+
         # The current throttle of the car
         throttle = data["throttle"]
+
         # The current speed of the car
         speed = data["speed"]
+
         # The current image from the center camera of the car
         imgString = data["image"]
         image = Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)
 
+        # Convert to YUV:
         image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2YUV)
 
         steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
@@ -70,6 +74,7 @@ def telemetry(sid, data):
         throttle = controller.update(float(speed))
 
         print(steering_angle, throttle)
+
         send_control(steering_angle, throttle)
 
         # save frame

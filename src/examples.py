@@ -1,6 +1,6 @@
 import cv2
 
-import utils
+from src import utils
 
 img = cv2.imread('example.jpg')
 img = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)

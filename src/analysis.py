@@ -3,9 +3,7 @@ import math
 
 from sklearn.model_selection import train_test_split
 
-import constants as CONST
-import utils
-
+from src import constants as CONST, utils
 
 # LOAD DATA:
 
