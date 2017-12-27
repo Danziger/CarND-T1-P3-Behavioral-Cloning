@@ -104,7 +104,7 @@ as we will see in greater detail the following sections.
 
 We will look into them in greater detail in the next sections.
 
-# TODO: Add references to this or explain details.
+TODO: Add references to this or explain details.
 
 
 #### 2. Attempts to reduce overfitting in the model
@@ -175,12 +175,11 @@ and for both circuits.
 At the end of the process, the vehicle is able to drive autonomously around both tracks, but with different models
 trained specifically for each of them. When merging the data of both circuits together it will fail in both.
 
-# TODO: Talk about the data analyris and that stuff...
+TODO: Talk about the data analyris and that stuff...
 
-# TODO: Also, after this augmentation it was worse than using example data. maybe not all augmentations are realistic or
-# are not the most valuable ones (shift?)
+TODO: Also, after this augmentation it was worse than using example data. maybe not all augmentations are realistic or are not the most valuable ones (shift?)
 
-# TODO: ELU Vanishing gradient
+TODO: ELU Vanishing gradient
 
 I tried augmenting the data in some other ways (brightness, contrast, sharpenes...) but this didn't help, so after
 spending some more time on this without success, I decided to submit the old model that would only drive on the firs
@@ -190,16 +189,15 @@ I will go into greater detail about this problem in the last section, as this pr
 I recorded. Therefore, augmenting it won't help to generate a better model, as the original data used to create the
 augmented one is already "corrupted" or just wrong.
 
-# TODO: Shit in, shit out
+TODO: Shit in, shit out
 
-# TODO model-ok info?
+TODO model-ok info?
 
 
 
 #### 2. Final Model Architecture
 
-# TODO: Polish code first, then continue with writeup adding lines and finishing following sections and then polish all, before
-# adding graphics.
+TODO: Polish code first, then continue with writeup adding lines and finishing following sections and then polish all, before adding graphics.
 
 The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
 
