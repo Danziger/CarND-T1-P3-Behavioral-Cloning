@@ -204,6 +204,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <th>NAME</th>
         <th>IN. SIZE</th>
         <th>OUT. SIZE</th>
+        <th>PARAMS</th>
         <th>DESCRIPTION</th>
     </tr>
     <tr>
@@ -211,6 +212,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>cropping2d_1</td>
         <td>`160 × 320 × 3`</td>
         <td>`65 × 320 × 3`</td>
+        <td>0</td>
         <td></td>
     </tr>
     <tr>
@@ -218,6 +220,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>lambda_1</td>
         <td>`65 × 320 × 3`</td>
         <td>`65 × 320 × 3`</td>
+        <td>0</td>
         <td></td>
     </tr>
     <tr>
@@ -225,6 +228,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>convolution2d_1</td>
         <td>`65 × 320 × 3`</td>
         <td>`31 × 158 × 24`</td>
+        <td>1824</td>
         <td></td>
     </tr>
     <tr>
@@ -232,6 +236,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>-</td>
         <td>`31 × 158 × 24`</td>
         <td>`31 × 158 × 24`</td>
+        <td>0</td>
         <td></td>
     </tr>
     <tr>
@@ -239,6 +244,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>convolution2d_2</td>
         <td>`31 × 158 × 24`</td>
         <td>`14 × 77 × 36`</td>
+        <td>21636</td>
         <td></td>
     </tr>
     <tr>
@@ -246,6 +252,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>-</td>
         <td>`14 × 77 × 36`</td>
         <td>`14 × 77 × 36`</td>
+        <td>0</td>
         <td></td>
     </tr>
     <tr>
@@ -253,6 +260,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>convolution2d_3</td>
         <td>`14 × 77 × 36`</td>
         <td>`5 × 37 × 48`</td>
+        <td>43248</td>
         <td></td>
     </tr>
     <tr>
@@ -260,6 +268,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>-</td>
         <td>`5 × 37 × 48`</td>
         <td>`5 × 37 × 48`</td>
+        <td>0</td>
         <td></td>
     </tr>
     <tr>
@@ -267,6 +276,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>convolution2d_4</td>
         <td>`5 × 37 × 48`</td>
         <td>`3 × 35 × 64`</td>
+        <td>27712</td>
         <td></td>
     </tr>
     <tr>
@@ -274,6 +284,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>-</td>
         <td>`3 × 35 × 64`</td>
         <td>`3 × 35 × 64`</td>
+        <td>0</td>
         <td></td>
     </tr>
     <tr>
@@ -281,6 +292,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>convolution2d_5</td>
         <td>`3 × 35 × 64`</td>
         <td>`1 × 33 × 64`</td>
+        <td>36928</td>
         <td></td>
     </tr>
     <tr>
@@ -288,6 +300,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>-</td>
         <td>`1 × 33 × 64`</td>
         <td>`1 × 33 × 64`</td>
+        <td>0</td>
         <td></td>
     </tr>
     <tr>
@@ -295,6 +308,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>flatten_1</td>
         <td>`1 × 33 × 64`</td>
         <td>`2112`</td>
+        <td>0</td>
         <td></td>
     </tr>
     <tr>
@@ -302,6 +316,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>dense_1</td>
         <td>`2112`</td>
         <td>`100`</td>
+        <td>211300</td>
         <td></td>
     </tr>
     <tr>
@@ -309,6 +324,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>-</td>
         <td>`100`</td>
         <td>`100`</td>
+        <td>0</td>
         <td></td>
     </tr>
     <tr>
@@ -316,6 +332,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>dense_2</td>
         <td>`100`</td>
         <td>`50`</td>
+        <td>5050</td>
         <td></td>
     </tr>
     <tr>
@@ -323,6 +340,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>-</td>
         <td>`50`</td>
         <td>`50`</td>
+        <td>0</td>
         <td></td>
     </tr>
     <tr>
@@ -330,6 +348,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>dense_3</td>
         <td>`50`</td>
         <td>`10`</td>
+        <td>510</td>
         <td></td>
     </tr>
     <tr>
@@ -337,6 +356,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>-</td>
         <td>`10`</td>
         <td>`10`</td>
+        <td>0</td>
         <td></td>
     </tr>
     <tr>
@@ -344,6 +364,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
         <td>dense_4</td>
         <td>`10`</td>
         <td>`1`</td>
+        <td>11</td>
         <td></td>
     </tr>
 </table>
