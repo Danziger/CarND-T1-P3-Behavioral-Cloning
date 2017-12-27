@@ -3,7 +3,9 @@ import math
 
 from sklearn.model_selection import train_test_split
 
-from src import constants as CONST, utils
+import utils
+import constants as CONST
+
 
 # LOAD DATA:
 
@@ -26,14 +28,13 @@ samples_mountain = utils.load_samples(CONST.DATA_DIR, CONST.IMG_DIR, CONST.LOG_F
 ])
 
 
-# EXTRACT ANGLES:
+# EXTRACT BASE ANGLES:
 
 angles_beach = list(map(lambda sample: sample["steering"], samples_beach))
 angles_mountain = list(map(lambda sample: sample["steering"], samples_mountain))
 angles_all = angles_beach + angles_mountain
 
-
-# PLOT:
+# Plot them:
 
 plt.hist([angles_beach, angles_mountain, angles_all])
 plt.legend(['Beach', 'Mountain', 'Both'], loc='upper right')
@@ -42,45 +43,58 @@ plt.show()
 
 # CALCULATE DISTRIBUTION AFTER USING SIDE CAMERAS AND MIRRORING AUGMENTATION:
 
-angles_beach_augmented = angles_beach \
-                         + list(map(lambda angle: -angle, angles_beach)) \
-                         + list(map(lambda angle: angle + 0.25, angles_beach)) \
-                         + list(map(lambda angle: angle - 0.25, angles_beach)) \
-                         + list(map(lambda angle: - (angle + 0.25), angles_beach)) \
-                         + list(map(lambda angle: - (angle - 0.25), angles_beach))
+angles_beach_6x = utils.multiply_angles(angles_beach, CONST.ANGLE_CORRECTION)
+angles_mountain_6x = utils.multiply_angles(angles_mountain, CONST.ANGLE_CORRECTION)
+angles_all_6x = angles_beach_6x + angles_mountain_6x
 
-super_beach = angles_beach_augmented + []
+# Plot them:
 
-for angle in angles_beach_augmented:
-    times = math.ceil(10 * abs(angle))
-
-    if times > 5:
-        super_beach += [angle] * times
+plt.hist([angles_beach_6x, angles_mountain_6x, angles_all_6x])
+plt.legend(['Beach 6x', 'Mountain 6x', 'Both 6x'], loc='upper right')
+plt.show()
 
 
-print('Super Beach # = %d' % len(super_beach))
+# CALCULATE DISTRIBUTION AFTER USING IMAGE AUGMENTATION METHODS:
 
-
-angles_mountain_augmented = angles_mountain \
-                         + list(map(lambda angle: -angle, angles_mountain)) \
-                         + list(map(lambda angle: angle + 0.25, angles_mountain)) \
-                         + list(map(lambda angle: angle - 0.25, angles_mountain)) \
-                         + list(map(lambda angle: - (angle + 0.25), angles_mountain)) \
-                         + list(map(lambda angle: - (angle - 0.25), angles_mountain))
-
-super_mountain = angles_mountain_augmented + []
-
-for angle in angles_mountain_augmented:
-    times = math.ceil(5 * abs(angle))
-
-    if times > 5:
-        super_mountain += [angle] * times
-
+angles_beach_augmented = utils.augment_angles(angles_beach_6x, CONST.BEACH_FILTER)
+angles_mountain_augmented = utils.augment_angles(angles_mountain_6x, CONST.MOUNTAIN_FILTER)
 angles_all_augmented = angles_beach_augmented + angles_mountain_augmented
-super_all = super_beach + super_mountain
 
-# PLOT:
+# Plot them:
 
-plt.hist([angles_beach, angles_beach_augmented, super_beach, angles_mountain, angles_mountain_augmented, super_mountain, angles_all, angles_all_augmented, super_all])
-plt.legend(['Beach', 'Beach Augmented', 'Super Beach', 'Mountain', 'Mountain Augmented', 'Super Mountain', 'Both', 'Both Augmented', 'Super Both'], loc='upper right')
+plt.hist([angles_beach_augmented, angles_mountain_augmented, angles_all_augmented])
+plt.legend(['Beach Aug.', 'Mountain Aug.', 'Both Aug.'], loc='upper right')
+plt.show()
+
+
+# PLOT ALL:
+
+plt.hist([
+    angles_beach,
+    angles_beach_6x,
+    angles_beach_augmented,
+
+    angles_mountain,
+    angles_mountain_6x,
+    angles_mountain_augmented,
+
+    angles_all,
+    angles_all_6x,
+    angles_all_augmented
+])
+
+plt.legend([
+    'Beach',
+    'Beach 6x',
+    'Beach Aug.',
+
+    'Mountain',
+    'Mountain 6x',
+    'Mountain Aug.',
+
+    'Both',
+    'Both 6x',
+    'Both Aug.'
+], loc='upper right')
+
 plt.show()

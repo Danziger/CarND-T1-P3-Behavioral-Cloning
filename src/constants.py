@@ -12,6 +12,8 @@ LOG_FILE = '/driving_log.csv'
 
 BEACH_EXAMPLE_FILE = 'BEACH-EXAMPLE'
 
+EXAMPLE_DATA_FILES = [BEACH_EXAMPLE_FILE]
+
 # Beach:
 
 BEACH_4_ANTICLOCK_FILE = 'BEACH-4-LAPS-ANTICLOCKWISE'
@@ -73,7 +75,7 @@ CROP_HEIGHT = HEIGHT - CROP_TOP - CROP_BOTTOM
 
 # GENERATOR:
 
-GENERATOR_BATCH_SIZE = 30 # Outputs batches of 30 * 6 = 180 images (augmented)
+GENERATOR_BATCH_SIZE = 30 # Outputs batches of 30 * 6 = 180 images (flip + side cameras)
 
 
 # HYPERPARAMS:
@@ -88,10 +90,22 @@ MODEL_EXTENSION = '.h5'
 MODEL_FILE = '../models/model.h5'
 MODEL_DIAGRAM_FILE = '../model.png'
 
+
+# AUGMENTATION FILTERS:
+# The steering angle of each sample will be evaluated with this function to calculate how many times it will be
+# augmented:
+
+def SKIP_FILTER(angle):
+    return False
+
+
 def BEACH_FILTER(angle):
     times = math.ceil(10 * abs(angle))
 
     return times if times > 5 else False
 
-def SKIP_FILTER(angle):
-    return False
+
+def MOUNTAIN_FILTER(angle):
+    times = math.ceil(5 * abs(angle))
+
+    return times if times > 5 else False
