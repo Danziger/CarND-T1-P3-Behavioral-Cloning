@@ -200,147 +200,146 @@ The final model architecture (`model.py:72:89`) consisted of a convolution neura
 <table>
     <tr>
         <th>LAYER (NAME)</th>
-        <th>NAME</th>
         <th>IN. SIZE</th>
         <th>OUT. SIZE</th>
         <th>PARAMS</th>
         <th>DESCRIPTION</th>
     </tr>
     <tr>
-        <td>Cropping2D (cropping2d_1)</td>
+        <td>Cropping2D<br/>(cropping2d_1)</td>
         <td>160 × 320 × 3</td>
         <td>65 × 320 × 3</td>
         <td>0</td>
         <td></td>
     </tr>
     <tr>
-        <td>Lambda (lambda_1)</td>
+        <td>Lambda<br/>(lambda_1)</td>
         <td>65 × 320 × 3</td>
         <td>65 × 320 × 3</td>
         <td>0</td>
         <td><code>lambda x: (x / 255.0) - 0.5</code></td>
     </tr>
     <tr>
-        <td>Convolution2D (convolution2d_1)</td>
+        <td>Convolution2D<br/>(convolution2d_1)</td>
         <td>65 × 320 × 3</td>
         <td>31 × 158 × 24</td>
         <td>1824</td>
-        <td>24 filters, 5 × 5 kernel, 2 × 2 stride & valid padding</td>
+        <td>24 filters, 5 × 5 kernel,<br/>2 × 2 stride & valid padding</td>
     </tr>
     <tr>
-        <td>ELU (-)</td>
+        <td>ELU<br/>(-)</td>
         <td>31 × 158 × 24</td>
         <td>31 × 158 × 24</td>
         <td>0</td>
         <td></td>
     </tr>
     <tr>
-        <td>Convolution2D (convolution2d_2)</td>
+        <td>Convolution2D<br/>(convolution2d_2)</td>
         <td>31 × 158 × 24</td>
         <td>14 × 77 × 36</td>
         <td>21636</td>
-        <td>36 filters, 5 × 5 kernel, 2 × 2 stride & valid padding</td>
+        <td>36 filters, 5 × 5 kernel,<br/>2 × 2 stride & valid padding</td>
     </tr>
     <tr>
-        <td>ELU (-)</td>
+        <td>ELU<br/>(-)</td>
         <td>14 × 77 × 36</td>
         <td>14 × 77 × 36</td>
         <td>0</td>
         <td></td>
     </tr>
     <tr>
-        <td>Convolution2D (convolution2d_3)</td>
+        <td>Convolution2D<br/>(convolution2d_3)</td>
         <td>14 × 77 × 36</td>
         <td>5 × 37 × 48</td>
         <td>43248</td>
-        <td>48 filters, 5 × 5 kernel, 2 × 2 stride & valid padding</td>
+        <td>48 filters, 5 × 5 kernel,<br/>2 × 2 stride & valid padding</td>
     </tr>
     <tr>
-        <td>ELU (-)</td>
+        <td>ELU<br/>(-)</td>
         <td>5 × 37 × 48</td>
         <td>5 × 37 × 48</td>
         <td>0</td>
         <td></td>
     </tr>
     <tr>
-        <td>Convolution2D (convolution2d_4)</td>
+        <td>Convolution2D<br/>(convolution2d_4)</td>
         <td>5 × 37 × 48</td>
         <td>3 × 35 × 64</td>
         <td>27712</td>
-        <td>64 filters, 5 × 5 kernel, 2 × 2 stride & valid padding</td>
+        <td>64 filters, 5 × 5 kernel,<br/>2 × 2 stride & valid padding</td>
     </tr>
     <tr>
-        <td>ELU (-)</td>
+        <td>ELU<br/>(-)</td>
         <td>3 × 35 × 64</td>
         <td>3 × 35 × 64</td>
         <td>0</td>
         <td></td>
     </tr>
     <tr>
-        <td>Convolution2D (convolution2d_5)</td>
+        <td>Convolution2D<br/>(convolution2d_5)</td>
         <td>3 × 35 × 64</td>
         <td>1 × 33 × 64</td>
         <td>36928</td>
-        <td>64 filters, 5 × 5 kernel, 2 × 2 stride & valid padding</td>
+        <td>64 filters, 5 × 5 kernel,<br/>2 × 2 stride & valid padding</td>
     </tr>
     <tr>
-        <td>ELU (-)</td>
+        <td>ELU<br/>(-)</td>
         <td>1 × 33 × 64</td>
         <td>1 × 33 × 64</td>
         <td>0</td>
         <td></td>
     </tr>
     <tr>
-        <td>Flatten (flatten_1)</td>
+        <td>Flatten<br/>(flatten_1)</td>
         <td>1 × 33 × 64</td>
         <td>2112</td>
         <td>0</td>
         <td></td>
     </tr>
     <tr>
-        <td>Dense (dense_1)</td>
+        <td>Dense<br/>(dense_1)</td>
         <td>2112</td>
         <td>100</td>
         <td>211300</td>
         <td></td>
     </tr>
     <tr>
-        <td>ELU (-)</td>
+        <td>ELU<br/>(-)</td>
         <td>100</td>
         <td>100</td>
         <td>0</td>
         <td></td>
     </tr>
     <tr>
-        <td>Dense (dense_2)</td>
+        <td>Dense<br/>(dense_2)</td>
         <td>100</td>
         <td>50</td>
         <td>5050</td>
         <td></td>
     </tr>
     <tr>
-        <td>ELU (-)</td>
+        <td>ELU<br/>(-)</td>
         <td>50</td>
         <td>50</td>
         <td>0</td>
         <td></td>
     </tr>
     <tr>
-        <td>Dense (dense_3)</td>
+        <td>Dense<br/>(dense_3)</td>
         <td>50</td>
         <td>10</td>
         <td>510</td>
         <td></td>
     </tr>
     <tr>
-        <td>ELU (-)</td>
+        <td>ELU<br/>(-)</td>
         <td>10</td>
         <td>10</td>
         <td>0</td>
         <td></td>
     </tr>
     <tr>
-        <td>Dense (dense_4)</td>
+        <td>Dense<br/>(dense_4)</td>
         <td>10</td>
         <td>1</td>
         <td>11</td>
