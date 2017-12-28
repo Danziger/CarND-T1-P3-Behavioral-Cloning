@@ -144,6 +144,8 @@ Interesting reads
 - ReLU vs ELU:
 
   https://www.quora.com/How-does-ELU-activation-function-help-convergence-and-whats-its-advantages-over-ReLU-or-sigmoid-or-tanh-function
+  
   http://saikatbasak.in/sigmoid-vs-relu-vs-elu/
+  
   https://www.picalike.com/blog/2015/11/28/relu-was-yesterday-tomorrow-comes-elu/
   
