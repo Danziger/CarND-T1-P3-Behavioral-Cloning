@@ -51,7 +51,7 @@ training was done with YUV images, and increasing the default speed of 9 to eith
 various videos with a higher driving speed.
 
 * `models/`: Multiple videos have been provided for demonstrational purposes. The relevant one for the evaluation is
-`beach.h5`.
+`both.h5`.
 
 * `output/videos/`: Multiple videos have been provided for demonstrational purposes. The relevant one for the evaluation
 is `both-data-beach-track-15-ok` (https://www.youtube.com/watch?v=BdSZWsjF4zA).
@@ -104,7 +104,8 @@ nonlinearity, respectively.
 ELU should make learning faster than ReLU as has a mean closer to 0 and L2 regularization is an analyticsl alternative
 to dropout, which randomly turns on and off neurons while training.
 
-It's worth mentioning that the dimensions of the layers also change in order to accomodate the generated images, which are `160px × 320px` originally and `65px × 320px` after cropping them.
+It's worth mentioning that the dimensions of the layers also change in order to accomodate the generated images, which
+are `160px × 320px` originally and `65px × 320px` after cropping them.
 
 #### 2. Attempts to reduce overfitting in the model
 
@@ -141,8 +142,8 @@ and add small modifications to it in order to prevent overfitting and adapt it t
 My first step was to use a simple one-fully-connected-layer neural network model as we saw throw the course, just ot get
 familiar with Keras first.
 
-The first addition to this were the Cropping2D and Lambda layers, to remove irrelevant data from the images (hood and
-sky) and normalize the data, respectively.
+The first addition to this were the `Cropping2D` and `Lambda` layers, to remove irrelevant portions of the images (hood
+and sky) and normalize the data, respectively.
 
 At this point, I was training the model for just 6 epochs and using only the center camera of the example data, as I
 wasn't really trying to obtain a valid model from this architecture.
@@ -151,47 +152,61 @@ Next, I replaced my only fully-connected layer with NVIDIA's architecture, as su
 model might be appropriate because the problem they were trying to solve is quite similar to ours and I trust NVIDIA as
 a reliable source of knowledge and relevant information. I also started training for 8 epochs.
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and
-validation set. I found that my the mean squared error would decrease quite fast and then start bouncing back and forth
-continuously, so probably the initial learning rate was too big. I first tried decreasing it from the default of 0.001
-to 0.0001, but it was now too slow. I finally used 0.0005 (half the default). After doing this, I also increased the
-epochs from 8 to 12.
+In order to gauge how well the model was working, I split my image and steering angle data set into a training set (80%)
+and a validation set (20%). I found that the mean squared error would decrease quite fast and then start bouncing back
+and forth continuously, so probably the initial learning rate was too big. I first tried decreasing it from the default
+of `0.001` to `0.0001`, but it was now too slow. I finally used `0.0005` (half the default). After doing this, I also
+increased the epochs from 8 to 12.
 
 The next problem I found was that I had a low mean squared error on the training set but a high mean squared error on the
-validation set. This implied that the model was overfitting. To combat it, I modified the model introducing Dropout
-layers, as I did in the previous project. However, this time the difference was not as big as before and also the mean
-squared error was decreasing slower, so I would have to increase the epochs. Instead, I took a look to some discussions
-around that topic in the forums and Slack channels and, after reading various online articles and Medium posts about
-regularization and dropout, I decided to give the former a try, so I added L2 regularization to all my convolutional and
-fully-connected layers (except the last one).
+validation set. This implied that the model was overfitting. To combat it, instead of using `Dropout` layers, as we did
+in the last project, I decided to try L2 regularization.
 
-This reduced the overfitting and generated a model that was driving smoothly the first long turn of the track and the
-next one, but crashing into the bridge. I then decided to use the images from all 3 cameras and flip them horizontally
-as well, so the dataset would now be 6 times bigger. This got the car a bit further, just across the bridge, but it
-crashed in the next turn, so I decided to record my own data, including full laps and recovery data in both directions
-and for both circuits.
+This reduced overfitting and generated a model that was driving smoothly the first 2 long turn of the track, but then
+crashing into the bridge. I then decided to use the images from all 3 cameras and flip them horizontally as well, so the
+dataset would now be 6 times bigger. This got the car a bit further, just across the bridge, but it crashed in the next
+turn, so I decided to record my own data, including full laps and recovery data in both directions and for both tracks.
 
 At the end of the process, the vehicle is able to drive autonomously around both tracks, but with different models
-trained specifically for each of them. When merging the data of both circuits together it will fail in both.
+trained specifically for each of them, as we can see in the videos:
 
-TODO: Talk about the data analyris and that stuff...
+- [`beach.h5`, Beach data on beach track at 20](https://www.youtube.com/watch?v=2aQ2ddly7Y8)
+- [`mountain.h5`, Mountain data on mountain track at 15](https://www.youtube.com/watch?v=FRqvp0jG8tc)
 
-TODO: Also, after this augmentation it was worse than using example data. maybe not all augmentations are realistic or are not the most valuable ones (shift?)
+TODO: Check remaining models in the folder!
 
-TODO: ELU Vanishing gradient
+Merging the data of both tracks together did actually help the model behave better in turns on the first track (although
+driving speed had to be reduced), as we can see if we compare this new video with the previous one, where the car almost
+missed a turn and went onto the ledge:
 
-I tried augmenting the data in some other ways (brightness, contrast, sharpenes...) but this didn't help, so after
-spending some more time on this without success, I decided to submit the old model that would only drive on the firs
-track.
+- [`both.h5`, Both data on beach track at 20 (crash)](https://www.youtube.com/watch?v=njMM31ynCVM)
+- [`both.h5`, Both data on beach track at 15](https://www.youtube.com/watch?v=BdSZWsjF4zA)
 
-I will go into greater detail about this problem in the last section, as this problem is mainly related with the data
-I recorded. Therefore, augmenting it won't help to generate a better model, as the original data used to create the
-augmented one is already "corrupted" or just wrong.
+However, it was a complete disaster in track 2:
 
-TODO: Shit in, shit out
+- [`both.h5`, Both data on mountain track at 15 (crash)](https://www.youtube.com/watch?v=oX7vcNPxgU0)
+- [`both.h5`, Both data on mountain track at 10 (crash)](https://www.youtube.com/watch?v=uaukR5QKSSk)
 
-TODO model-ok info?
+This model, `both.h5`, and the video of it driving at 15, are the ones meant to be evaluated. The rest are there just
+for demonstrational purposes.
 
+At this point I started suspecting this was a problem with the data, probably with the original data I recorded rather
+than a matter of augmenting it further, as instead of doing center lane driving I was doing racing driving, following
+racing lines and therefor constantly approaching curbs and even riding them, as I thought it would be possible to train
+a model to drive like that.
+
+I quickly realized in order for the model to be able to do that it would have to remember the steering angle of the
+previous N states, as that's the only way to know, once you ride onto a curb, if you are about to leave the track or
+just following a normal racing line. Therefore, I could either try to feed that buffer with the N last steering angles
+to the network, probably appending them to the `Flatten` output, or look into Keras' recurrent neural network (RNN)
+layers.
+
+As I'm not too familiar with them and that would need quite a bit of time to change the architecture as well as the way
+I feed in the training data, which would now have to be shuffled keeping the sequences together rather than as
+individual images, I decided not to implement these changes and just focus on trying to get better models by further
+augmenting the data, which didn't work out at the end anyway.
+
+We will look into the data issues in detail the last section of this document.
 
 
 #### 2. Final Model Architecture
@@ -359,53 +374,145 @@ We can also visualize it in this diagram generated with Keras's `visualize_util`
 
 #### 3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
+I first started using the example training data that was provided with the project. Once I could not generate better
+models using just the center camera, I started using all 3 images (left, center and right) and their horizontally
+flipped versions. This is how they look:
 
-![alt text][image2]
+<table>
+    <tr>
+        <td colspan="3">Random sample from example data set</td>
+    </tr>
+    <tr>
+        <td><img src="./output/images/003 - Example Image Left"</td>
+        <td><img src="./output/images/004 - Example Image Center"</td>
+        <td><img src="./output/images/005 - Example Image Right"</td>
+    </tr>
+    <tr>
+        <td>Left</td>
+        <td>Center</td>
+        <td>Right</td>
+    </tr>
+</table>
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+<table>
+    <tr>
+        <td colspan="3">Random sample from example data set (flipped)</td>
+    </tr>
+    <tr>
+        <td><img src="./output/images/006 - Example Image Left Flip"</td>
+        <td><img src="./output/images/007 - Example Image Center Flip"</td>
+        <td><img src="./output/images/008 - Example Image Right Flip"</td>
+    </tr>
+    <tr>
+        <td>Left</td>
+        <td>Center</td>
+        <td>Right</td>
+    </tr>
+</table>
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
+From the very beginning I was randomly shuffling the data and splitting it in two different sets: training (80%) and
+validation (20%). The model was trained with the training set, while the validation set helped determine if the model
+was over or under fitting.
 
-Then I repeated this process on track two in order to get more data points.
+As I wanted more data and data for both tracks, I started recording my own using the simulator and steering the car
+using the mouse to progressively steer it, generating smother data, as we can see in this example sequence:
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
+TODO: Add CSV
 
-![alt text][image6]
-![alt text][image7]
+This new training data includes 4 laps on each direction on each track, but instead of doing center lane driving I was
+doing racing driving, following racing lines and therefor constantly approaching curbs and even riding them, as I
+thought it would be possible to train a model to drive like that. These are some examples of the images I recorded from
+the middle camera:
 
-Etc ....
+TODO: Table with images of each track
 
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+I also recorded recovery data for both tracks, 1 lap on each direction on each of them. I started recording each
+recovery from the point the car is almost going out of the track, maybe already driving onto a ledge, until it's already
+more or less in the center of the road gain, so that the car would learn how to react when it's about to miss a turn.
+These are some examples:
 
+TODO: Table with images of each track
 
-I finally randomly shuffled the data set and put Y% of the data into a validation set.
+Using this data, I generated multiple models, some trained with data of just one of the tracks and some others with both
+data sets merged together. Some of them were able to keep the car on the road and drive a whole lap without crashing,
+but I couldn't get a single model that was able to do both tracks successfully, so I started suspecting there was a
+problem with the original data I recorded rather than a matter of augmenting it further, as the data sets that I was
+using with these basic augmentation techniques (flipping and using all 3 cameras) were already big enough.
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I trained the models on a single track's data set for 12 epochs, and 24 epochs those on both data sets, as even thought
+the loss was still decreasing, at that point it was doing that slowly and some of the models were already able to
+successfully drive the car without crashing. I used an adam optimizer so that manually adjusting the learning rate
+wasn't necessary, but I decreased its initial learning rate from the default `0.001` to `0.0005` (half the default) to
+speed up training.
 
-TODO: Mention augmentation using Carla or shifting the images..
+However, the performance of the model is still not amazing mainly due to the way the full laps were recorded, as instead
+of doing center lane driving I tried to follow racing lines, which won't help the model drive properly with this kind of
+neural network (it won't be able to drive properly nor on the center of the lane nor following racing lines as I did).
+
+As I mentioned before, I realized I would need to use RNNs to be able to train a model to drive like that, as once you
+ride onto a curb, the only way to know if you are about to leave the track or just following a normal racing line is to
+consider the previous steering angles to know the trajectory you are (or have been) following.
+
+As an example, these are two images from the data set I recorded:
+
+TODO: Add these two examples
+
+Both are about to leave the track, but while one was recorded as part of the full 4 laps that were meant to be the
+behaviour that the model should mimic, the other one was recorded as part of the recovery laps. Therefor, the steering
+angle is smoother (closer to 0) in the former, but there's no way for the model to know the difference just looking at
+the images, because the relevant information in order to know if we should steer harder or softer is the trajectory that
+we have been following before.
 
 TODO: Mention racing lines will make the model not know how to react near the border unless much more recovery data than normal data has been recorded, which is actually the other way around...
 
 
+For  the reasons I explained before, I decided not to implement these changes and just focus on trying to get better
+models by analyzing the data and further augmenting it, which didn't work out at the end anyway. We will see why next.
 
 
-New training data was recorded to keep the vehicle driving on the road, using the mouse to progressively steer it,
-generating smother data, as we can see in this portion of one of the CSV files:
+##### Understanding the Data
 
-TODO: Add CSV
+First, I got some basic stats and histograms of the data:
 
-This new training data includes both normal laps and recovery data, both recorded in both directions.
+TODO: Add stats and plots
 
-The images from all 3 cameras have been used and all that data have been augmented using various methods, from simple
-ones like flipping the images horizontally and changing the sign of the angle, to more advanced ones like changing the
-brightness, contrast or sharpness of the images.
 
-It's worth mentioning that the performance of the model is still not amazing mainly due to the way the full laps were
-recorded, as instead of doing center lane driving I tried to follow racing lines, which won't help the model drive
-properly with this kind of neural network (it won't be able to drive properly nor on the center of the lane nor
-following racing lines as I did).
+##### Further Augmenting the Data
 
-For details about this issue and how I created the training data, see the next section.
+In order to get a flatter histogram, I had to either not use all the over-represented samples in each epoch or augment
+the under-represented ones in some other ways, which is what I did, using any of these methods or a combination of them:
+
+- Increase/decrease brightness in all the image, left half, right half or both half in different ways.
+- Increase/decrease contrast in all the image, left half, right half or both half in different ways.
+- Increase the sharpness of the image.
+- Blur the image.
+
+These are some examples of augmented images using these methods:
+
+TODO: Add images
+
+However, this didn't work out well, and new models trained using these augmentation techniques, on either a single
+track's data or on both's, for 16-32 epochs, were not able to keep the car on the road. As we have already seen, the
+original data was recorded with a behaviour in mind that can't be learned by this type of neural network, so it's not
+the best data to generate a model that center lane drives the car properly.
+
+TODO: training/validation changes as validation is not augmented
+
+Therefore, augmenting it won't help to generate a better model, as the original data used to create the it is already
+"wrong". In other words, shit in, shit out.
+
+
+##### Other Augmentation
+
+Anyway, the augmentation methods used could also be improved. For example, blurring the images might not help the model
+as any of the images captured by car when driving autonomously look like that. Instead, blurring could have been used on
+all the images as a postprocessing step in order to remove noise.
+
+Moreover, in order to give the model a wider variety of steering angles to help it generalise better, the images could
+have been augmented by shifting them horizontally and adjusting the steering angle based on that.
+
+
+##### Alternatives to Obtain Training Data
+
+
+TODO: Mention augmentation using Carla or shifting the images..
