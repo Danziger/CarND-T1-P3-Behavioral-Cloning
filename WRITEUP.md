@@ -14,6 +14,7 @@ First of all, the results of the project can be found in YouTube:
 [//]: # (Image References)
 
 [image1]: ./output/images/001%20-%20NVIDIA%20CNN.png "NVIDIA CNN"
+[image2]: ./output/images/002%20-%20Architecture%20Diagram.png "Architecture Diagram"
 
 [sign1]: ./input/images/resized/001%20-%20Yield.jpg "Yield"
 
@@ -350,6 +351,10 @@ The final model architecture (`model.py:72:89`) consisted of a convolution neura
                   TOTAL PARAMS: 348219
         TOTAL TRAINABLE PARAMS: 348219 (100%)
     TOTAL NON-TRAINABLE PARAMS: 0 (0%)
+
+We can also visualize it in this diagram generated with Keras's `visualize_util`, althouth it contains a lower level of detail:
+
+![Architecture Diagram][image2]
 
 
 #### 3. Creation of the Training Set & Training Process
