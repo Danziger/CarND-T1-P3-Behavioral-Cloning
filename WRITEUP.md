@@ -383,9 +383,9 @@ flipped versions. This is how they look:
         <td colspan="3">Random sample from example data set</td>
     </tr>
     <tr>
-        <td><img src="./output/images/003 - Example Image Left"</td>
-        <td><img src="./output/images/004 - Example Image Center"</td>
-        <td><img src="./output/images/005 - Example Image Right"</td>
+        <td><img src="./output/images/003 - Example Image Left.jpg"</td>
+        <td><img src="./output/images/004 - Example Image Center.jpg"</td>
+        <td><img src="./output/images/005 - Example Image Right.jpg"</td>
     </tr>
     <tr>
         <td>Left</td>
@@ -399,9 +399,9 @@ flipped versions. This is how they look:
         <td colspan="3">Random sample from example data set (flipped)</td>
     </tr>
     <tr>
-        <td><img src="./output/images/006 - Example Image Left Flip"</td>
-        <td><img src="./output/images/007 - Example Image Center Flip"</td>
-        <td><img src="./output/images/008 - Example Image Right Flip"</td>
+        <td><img src="./output/images/006 - Example Image Left Flip.jpg"</td>
+        <td><img src="./output/images/007 - Example Image Center Flip.jpg"</td>
+        <td><img src="./output/images/008 - Example Image Right Flip.jpg"</td>
     </tr>
     <tr>
         <td>Left</td>
@@ -415,16 +415,61 @@ validation (20%). The model was trained with the training set, while the validat
 was over or under fitting.
 
 As I wanted more data and data for both tracks, I started recording my own using the simulator and steering the car
-using the mouse to progressively steer it, generating smother data, as we can see in this example sequence:
+using the mouse to progressively steer it, generating smother data, as we can see in this example sequence from the
+second track:
 
-TODO: Add CSV
+    CENTER, LEFT, RIGHT, STEERING, THROTTLE, BRAKE, SPEED
+    center_2017_12_06_19_34_11_629.jpg, left_2017_12_06_19_34_11_629.jpg, right_2017_12_06_19_34_11_629.jpg, -0.1971831, 1, 0, 30.00002
+    center_2017_12_06_19_34_11_698.jpg, left_2017_12_06_19_34_11_698.jpg, right_2017_12_06_19_34_11_698.jpg, -0.3615023, 1, 0, 29.98839
+    center_2017_12_06_19_34_11_768.jpg, left_2017_12_06_19_34_11_768.jpg, right_2017_12_06_19_34_11_768.jpg, -0.4929577, 1, 0, 29.88935
+    center_2017_12_06_19_34_11_837.jpg, left_2017_12_06_19_34_11_837.jpg, right_2017_12_06_19_34_11_837.jpg, -0.5211267, 1, 0, 29.89587
+    center_2017_12_06_19_34_11_906.jpg, left_2017_12_06_19_34_11_906.jpg, right_2017_12_06_19_34_11_906.jpg, -0.5211267, 1, 0, 29.8897
+    center_2017_12_06_19_34_11_977.jpg, left_2017_12_06_19_34_11_977.jpg, right_2017_12_06_19_34_11_977.jpg, -0.5211267, 1, 0, 29.90949
+    center_2017_12_06_19_34_12_048.jpg, left_2017_12_06_19_34_12_048.jpg, right_2017_12_06_19_34_12_048.jpg, -0.5211267, 1, 0, 29.62439
+    center_2017_12_06_19_34_12_117.jpg, left_2017_12_06_19_34_12_117.jpg, right_2017_12_06_19_34_12_117.jpg, -0.5305164, 1, 0, 29.67329
+    center_2017_12_06_19_34_12_187.jpg, left_2017_12_06_19_34_12_187.jpg, right_2017_12_06_19_34_12_187.jpg, -0.5492958, 1, 0, 29.49336
+    center_2017_12_06_19_34_12_258.jpg, left_2017_12_06_19_34_12_258.jpg, right_2017_12_06_19_34_12_258.jpg, -0.6478873, 1, 0, 29.40748
+    center_2017_12_06_19_34_12_327.jpg, left_2017_12_06_19_34_12_327.jpg, right_2017_12_06_19_34_12_327.jpg, -0.8732395, 1, 0, 30.01801
+    center_2017_12_06_19_34_12_397.jpg, left_2017_12_06_19_34_12_397.jpg, right_2017_12_06_19_34_12_397.jpg, -0.9295775, 1, 0, 29.9991
+    center_2017_12_06_19_34_12_466.jpg, left_2017_12_06_19_34_12_466.jpg, right_2017_12_06_19_34_12_466.jpg, -0.9342723, 1, 0, 30.12491
+    center_2017_12_06_19_34_12_536.jpg, left_2017_12_06_19_34_12_536.jpg, right_2017_12_06_19_34_12_536.jpg, -0.9342723, 1, 0, 30.10107
 
 This new training data includes 4 laps on each direction on each track, but instead of doing center lane driving I was
 doing racing driving, following racing lines and therefor constantly approaching curbs and even riding them, as I
 thought it would be possible to train a model to drive like that. These are some examples of the images I recorded from
-the middle camera:
+the middle camera on each track:
 
-TODO: Table with images of each track
+<table>
+    <tr>
+        <td colspan="3">Random center camera images from track 1's data set (full laps)</td>
+    </tr>
+    <tr>
+        <td><img src="./output/images/009 - Beach Image Center 1.jpg"</td>
+        <td><img src="./output/images/010 - Beach Image Center 2.jpg"</td>
+        <td><img src="./output/images/011 - Beach Image Center 3.jpg"</td>
+    </tr>
+    <tr>
+        <td>Left</td>
+        <td>Center</td>
+        <td>Right</td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td colspan="3">Random center camera images from track 2's data set (full laps)</td>
+    </tr>
+    <tr>
+        <td><img src="./output/images/012 - Mountain Image Center 1.jpg"</td>
+        <td><img src="./output/images/013 - Mountain Image Center 2.jpg"</td>
+        <td><img src="./output/images/014 - Mountain Image Center 3.jpg"</td>
+    </tr>
+    <tr>
+        <td>Left</td>
+        <td>Center</td>
+        <td>Right</td>
+    </tr>
+</table>
 
 I also recorded recovery data for both tracks, 1 lap on each direction on each of them. I started recording each
 recovery from the point the car is almost going out of the track, maybe already driving onto a ledge, until it's already
@@ -490,6 +535,10 @@ the under-represented ones in some other ways, which is what I did, using any of
 These are some examples of augmented images using these methods:
 
 TODO: Add images
+
+And these are the new distributions after augmenting the datasets with the criteria implemented in `constants.py:86-111`:
+
+TODO: ADD PLOTS!
 
 However, this didn't work out well, and new models trained using these augmentation techniques, on either a single
 track's data or on both's, for 16-32 epochs, were not able to keep the car on the road. As we have already seen, the
