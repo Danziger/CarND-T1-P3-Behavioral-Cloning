@@ -90,7 +90,7 @@ def augment(base_img, random1=None, random2=None):
         img = contrast(img, m, w) if type is 4 else brightness(img, m, w)
     elif type <= 7: # 6, 7:  Both
         img = contrast(img, 0, m) if type is 6 else brightness(img, 0, m)
-        img = contrast(img, m, w) if type is 6 else brightness(img, m, w)
+        img = brightness(img, m, w) if type is 6 else contrast(img, m, w)
     # else: 8, 9: Nothing here
 
     # TODO: Update this to have more possibilities?
@@ -101,12 +101,10 @@ def augment(base_img, random1=None, random2=None):
 
     if type is 0:
         # Noise (sharp)
-        # print('Sharp')
         k = random.choice([3, 5, 7, 9])
         img = cv2.addWeighted(img, 2, cv2.GaussianBlur(img, (k, k), 0), -1, 0)
     elif type is 1:
         # Blur
-        # print('Blur')
         k = random.choice([3, 5, 7, 9])
         img = cv2.GaussianBlur(img, (k, k), 0)
     # else: 2: Nothing here

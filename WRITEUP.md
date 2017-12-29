@@ -180,8 +180,6 @@ trained specifically for each of them, as we can see in the videos:
 - [`beach.h5`, Beach data on beach track at 20](https://www.youtube.com/watch?v=2aQ2ddly7Y8)
 - [`mountain.h5`, Mountain data on mountain track at 15](https://www.youtube.com/watch?v=FRqvp0jG8tc)
 
-TODO: Check remaining models in the folder!
-
 Merging the data of both tracks together did actually help the model behave better in turns on the first track (although
 driving speed had to be reduced), as we can see if we compare this new video with the previous one, where the car almost
 missed a turn and went onto the ledge:
@@ -628,7 +626,51 @@ the under-represented ones in some other ways, which is what I did, using any of
 
 These are some examples of augmented images using these methods:
 
-TODO: Add images
+<table>
+    <tr>
+        <td colspan="3">Augmentation Examples</td>
+    </tr>
+    <tr>
+        <td><img src="./output/images/031 - Augmented Example All Contrast Up.jpg"</td>
+        <td><img src="./output/images/032 - Augmented Example All Brightness Down.jpg"</td>
+        <td><img src="./output/images/033 - Augmented Example Left Contrast Up.jpg"</td>
+    </tr>
+    <tr>
+        <td>All Contrast Up</td>
+        <td>All Brightness Down</td>
+        <td>Left Contrast Up</td>
+    </tr>
+    <tr>
+        <td><img src="./output/images/034 - Augmented Example Right Contrast Down.jpg"</td>
+        <td><img src="./output/images/035 - Augmented Example Left Brightness Down.jpg"</td>
+        <td><img src="./output/images/036 - Augmented Example Right Brightness Down.jpg"</td>
+    </tr>
+    <tr>
+        <td>Right Contrast Down</td>
+        <td>Left Brightness Down</td>
+        <td>Right Brightness Down</td>
+    </tr>
+    <tr>
+        <td><img src="./output/images/037 - Augmented Example Contrast Down & Brightness Down.jpg"</td>
+        <td><img src="./output/images/038 - Augmented Example Brightness Down & Contrast Up.jpg"</td>
+        <td><img src="./output/images/039 - Augmented Example Blur.jpg"</td>
+    </tr>
+    <tr>
+        <td>Contrast Down & Brightness Down</td>
+        <td>Brightness Down & Contrast Up</td>
+        <td>Blur</td>
+    </tr>
+    <tr>
+        <td><img src="./output/images/040 - Augmented Example Sharp.jpg"</td>
+        <td><img src="./output/images/041 - Augmented Example Contrast Up & Brightness Up & Blur.jpg"</td>
+        <td><img src="./output/images/042 - Augmented Example Brightness Down & Contrast Down & Sharp.jpg"</td>
+    </tr>
+    <tr>
+        <td>Sharp</td>
+        <td>Contrast Up, Brightness Up & Blur</td>
+        <td>Brightness Down, Contrast Down & Sharp</td>
+    </tr>
+</table>
 
 And these are the new stats and distributions after augmenting the datasets with the criteria implemented in
 `constants.py:86-111`:
@@ -668,4 +710,6 @@ have been augmented by shifting them horizontally and adjusting the steering ang
 
 ##### Alternatives to Obtain Training Data
 
-TODO: Mention augmentation using Carla or shifting the images..
+As an alternative to Udacity's driving simulator, I would have used [Carla](https://github.com/carla-simulator/carla),
+an open-source simulator for autonomous driving research, as I think it would be better to generate the training data
+artificially instead of manually driving the car around the track, as that's time consuming and error-prone.
