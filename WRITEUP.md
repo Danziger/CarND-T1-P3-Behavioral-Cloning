@@ -15,6 +15,7 @@ First of all, the results of the project can be found in YouTube:
 
 [image1]: ./output/images/001%20-%20NVIDIA%20CNN.png "NVIDIA CNN"
 [image2]: ./output/images/002%20-%20Architecture%20Diagram.png "Architecture Diagram"
+[image3]: ./output/images/023%20-%20Mountain%20Crash.png "Mountain Crash"
 
 [sign1]: ./input/images/resized/001%20-%20Yield.jpg "Yield"
 
@@ -399,14 +400,14 @@ flipped versions. This is how they look:
         <td colspan="3">Random sample from example data set (flipped)</td>
     </tr>
     <tr>
+        <td><img src="./output/images/008 - Example Image Right Flip.jpg"</td>
         <td><img src="./output/images/006 - Example Image Left Flip.jpg"</td>
         <td><img src="./output/images/007 - Example Image Center Flip.jpg"</td>
-        <td><img src="./output/images/008 - Example Image Right Flip.jpg"</td>
     </tr>
     <tr>
-        <td>Left</td>
-        <td>Center</td>
         <td>Right</td>
+        <td>Center</td>
+        <td>Left</td>
     </tr>
 </table>
 
@@ -476,7 +477,37 @@ recovery from the point the car is almost going out of the track, maybe already 
 more or less in the center of the road gain, so that the car would learn how to react when it's about to miss a turn.
 These are some examples:
 
-TODO: Table with images of each track
+<table>
+    <tr>
+        <td colspan="3">Random center camera images from track 1's data set (recovery)</td>
+    </tr>
+    <tr>
+        <td><img src="./output/images/015 - Beach Recovery Image Center 1.jpg"</td>
+        <td><img src="./output/images/016 - Beach Recovery Image Center 2.jpg"</td>
+        <td><img src="./output/images/017 - Beach Recovery Image Center 3.jpg"</td>
+    </tr>
+    <tr>
+        <td>Left</td>
+        <td>Center</td>
+        <td>Right</td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td colspan="3">Random center camera images from track 2's data set (recovery)</td>
+    </tr>
+    <tr>
+        <td><img src="./output/images/018 - Mountain Recovery Image Center 1.jpg"</td>
+        <td><img src="./output/images/019 - Mountain Recovery Image Center 2.jpg"</td>
+        <td><img src="./output/images/020 - Mountain Recovery Image Center 3.jpg"</td>
+    </tr>
+    <tr>
+        <td>Left</td>
+        <td>Center</td>
+        <td>Right</td>
+    </tr>
+</table>
 
 Using this data, I generated multiple models, some trained with data of just one of the tracks and some others with both
 data sets merged together. Some of them were able to keep the car on the road and drive a whole lap without crashing,
@@ -498,9 +529,21 @@ As I mentioned before, I realized I would need to use RNNs to be able to train a
 ride onto a curb, the only way to know if you are about to leave the track or just following a normal racing line is to
 consider the previous steering angles to know the trajectory you are (or have been) following.
 
-As an example, these are two images from the data set I recorded:
+As an example, these are two images from the data set I recorded for the second track:
 
-TODO: Add these two examples
+<table>
+    <tr>
+        <td colspan="2">Random center camera images from track 2's data set</td>
+    </tr>
+    <tr>
+        <td><img src="./output/images/021 - Mountain Normal Confusing.jpg"</td>
+        <td><img src="./output/images/022 - Mountain Recovery Confusing.jpg"</td>
+    </tr>
+    <tr>
+        <td>"Normal" Driving</td>
+        <td>Recovery</td>
+    </tr>
+</table>
 
 Both are about to leave the track, but while one was recorded as part of the full 4 laps that were meant to be the
 behaviour that the model should mimic, the other one was recorded as part of the recovery laps. Therefor, the steering
@@ -508,11 +551,21 @@ angle is smoother (closer to 0) in the former, but there's no way for the model 
 the images, because the relevant information in order to know if we should steer harder or softer is the trajectory that
 we have been following before.
 
-TODO: Mention racing lines will make the model not know how to react near the border unless much more recovery data than normal data has been recorded, which is actually the other way around...
+Also, while I have recorded recovery data focusing just on how to steer the car back into the read, but not on how to
+get there at first, as I want the model not to learn that, I'm giving it that information with the normal "racing" laps,
+so the whole point of adding recovery data is probably lost. Even worse, on top of that, there is 4 times more normal
+laps than recovery data.
+
+For  the reasons I explained before and mainly a time restriction, I decided not to implement these changes nor record a
+completely new data set, and instead just focus on trying to get better models by analyzing the data and further
+augmenting it, which didn't work out at the end anyway. We will see why next.
 
 
-For  the reasons I explained before, I decided not to implement these changes and just focus on trying to get better
-models by analyzing the data and further augmenting it, which didn't work out at the end anyway. We will see why next.
+##### Other Issues
+
+While getting sample images for the write up, I even found some images of crashes that I recorded unintentionally:
+
+![Mountain Crash][image3]
 
 
 ##### Understanding the Data
