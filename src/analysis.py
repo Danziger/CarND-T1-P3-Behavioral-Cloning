@@ -36,6 +36,10 @@ angles_all = angles_beach + angles_mountain
 
 # Plot them:
 
+print('Beach samples: %d' % len(angles_beach))
+print('Mountain samples: %d' % len(angles_mountain))
+print('All samples: %d' % len(angles_all))
+
 plt.hist([angles_beach, angles_mountain, angles_all])
 plt.legend(['Beach', 'Mountain', 'Both'], loc='upper right')
 plt.show()
@@ -49,6 +53,10 @@ angles_all_6x = angles_beach_6x + angles_mountain_6x
 
 # Plot them:
 
+print('Beach samples 6x: %d' % len(angles_beach_6x))
+print('Mountain samples 6x: %d' % len(angles_mountain_6x))
+print('All samples 6x: %d' % len(angles_all_6x))
+
 plt.hist([angles_beach_6x, angles_mountain_6x, angles_all_6x])
 plt.legend(['Beach 6x', 'Mountain 6x', 'Both 6x'], loc='upper right')
 plt.show()
@@ -61,6 +69,10 @@ angles_mountain_augmented = utils.augment_angles(angles_mountain_6x, CONST.MOUNT
 angles_all_augmented = angles_beach_augmented + angles_mountain_augmented
 
 # Plot them:
+
+print('Beach samples augmented: %d' % len(angles_beach_augmented))
+print('Mountain samples augmented: %d' % len(angles_mountain_augmented))
+print('All samples augmented: %d' % len(angles_all_augmented))
 
 plt.hist([angles_beach_augmented, angles_mountain_augmented, angles_all_augmented])
 plt.legend(['Beach Aug.', 'Mountain Aug.', 'Both Aug.'], loc='upper right')

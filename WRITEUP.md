@@ -15,9 +15,11 @@ First of all, the results of the project can be found in YouTube:
 
 [image1]: ./output/images/001%20-%20NVIDIA%20CNN.png "NVIDIA CNN"
 [image2]: ./output/images/002%20-%20Architecture%20Diagram.png "Architecture Diagram"
-[image3]: ./output/images/023%20-%20Mountain%20Crash.png "Mountain Crash"
-
-[sign1]: ./input/images/resized/001%20-%20Yield.jpg "Yield"
+[image3]: ./output/images/023%20-%20Mountain%20Crash.jpg "Mountain Crash"
+[image4]: ./output/images/024%20-%20Original%20Distribution.png "Original Distribution"
+[image5]: ./output/images/025%20-%206x%20Distribution.png "Flipped & 3 Cameras Distribution"
+[image6]: ./output/images/026%20-%20Augmented%20Distribution.png "Augmented Distribution"
+[image7]: ./output/images/027%20-%20All%20Distributions.png "All Distributions"
 
 
 Project Goals
@@ -39,6 +41,7 @@ I addressed each point in my implementation.
 
 
 ### FILES SUBMITTED & CODE QUALITY
+
 
 #### 1. Submission includes all required files and can be used to run the simulator in autonomous mode.
 
@@ -90,6 +93,7 @@ Some of the functionality has been extracted to `utils.py` and `constants.py`, s
 
 ### MODEL ARCHITECTURE AND TRAINING STRATEGY
 
+
 #### 1. An appropriate model architecture has been employed
 
 As suggested through the course, my model architecture is based on the one from
@@ -107,6 +111,7 @@ to dropout, which randomly turns on and off neurons while training.
 
 It's worth mentioning that the dimensions of the layers also change in order to accomodate the generated images, which
 are `160px × 320px` originally and `65px × 320px` after cropping them.
+
 
 #### 2. Attempts to reduce overfitting in the model
 
@@ -134,6 +139,7 @@ to improve it can be found in the last point of the next section.
 
 
 ### ARCHITECTURE, TRAINING DOCUMENTATION & POSSIBLE IMPROVEMENTS
+
 
 #### 1. Solution Design Approach
 
@@ -517,9 +523,26 @@ using with these basic augmentation techniques (flipping and using all 3 cameras
 
 I trained the models on a single track's data set for 12 epochs, and 24 epochs those on both data sets, as even thought
 the loss was still decreasing, at that point it was doing that slowly and some of the models were already able to
-successfully drive the car without crashing. I used an adam optimizer so that manually adjusting the learning rate
-wasn't necessary, but I decreased its initial learning rate from the default `0.001` to `0.0005` (half the default) to
-speed up training.
+successfully drive the car without crashing. These are the plots of training and validation losses:
+
+<table>
+    <tr>
+        <td colspan="3">MSE loss VS epochs</td>
+    </tr>
+    <tr>
+        <td><img src="./output/images/028 - MSE Loss Beach.png"</td>
+        <td><img src="./output/images/029 - MSE Loss Mountain.png"</td>
+        <td><img src="./output/images/030 - MSE Loss Both.png"</td>
+    </tr>
+    <tr>
+        <td>Beach</td>
+        <td>Mountain</td>
+        <td>Both</td>
+    </tr>
+</table>
+
+I used an adam optimizer so that manually adjusting the learning rate wasn't necessary, but I decreased its initial
+learning rate from the default `0.001` to `0.0005` (half the default) to speed up training.
 
 However, the performance of the model is still not amazing mainly due to the way the full laps were recorded, as instead
 of doing center lane driving I tried to follow racing lines, which won't help the model drive properly with this kind of
@@ -552,9 +575,9 @@ the images, because the relevant information in order to know if we should steer
 we have been following before.
 
 Also, while I have recorded recovery data focusing just on how to steer the car back into the read, but not on how to
-get there at first, as I want the model not to learn that, I'm giving it that information with the normal "racing" laps,
-so the whole point of adding recovery data is probably lost. Even worse, on top of that, there is 4 times more normal
-laps than recovery data.
+get there at first, as I don't want the model to learn that, I'm giving it that information with the normal "racing"
+laps, so the whole point of adding recovery data is probably lost. Even worse, on top of that, there is 4 times more
+normal laps than recovery data.
 
 For  the reasons I explained before and mainly a time restriction, I decided not to implement these changes nor record a
 completely new data set, and instead just focus on trying to get better models by analyzing the data and further
@@ -572,7 +595,25 @@ While getting sample images for the write up, I even found some images of crashe
 
 First, I got some basic stats and histograms of the data:
 
-TODO: Add stats and plots
+             ORIGINAL
+    
+       Beach samples: 11724
+    Mountain samples: 9386
+         All samples: 21110
+    
+     FLIP & 3 CAMERAS
+    
+       Beach samples: 70344
+    Mountain samples: 56316
+         All samples: 126660
+
+**ORIGINAL DISTRIBUTION**
+
+![Original Distribution][image4]
+
+**DISTRIBUTION AFTER FLIPPING AND USING 3 CAMERAS**
+
+![Flipped & 3 Cameras Distribution][image5]
 
 
 ##### Further Augmenting the Data
@@ -589,16 +630,27 @@ These are some examples of augmented images using these methods:
 
 TODO: Add images
 
-And these are the new distributions after augmenting the datasets with the criteria implemented in `constants.py:86-111`:
+And these are the new stats and distributions after augmenting the datasets with the criteria implemented in
+`constants.py:86-111`:
 
-TODO: ADD PLOTS!
+         AUGMENTATION
+    
+       Beach samples: 119712
+    Mountain samples: 81066
+         All samples: 200778
 
-However, this didn't work out well, and new models trained using these augmentation techniques, on either a single
-track's data or on both's, for 16-32 epochs, were not able to keep the car on the road. As we have already seen, the
+**AUGMENTED IMAGES DISTRIBUTION**
+
+![Augmented Distribution][image6]
+
+**ALL DISTRIBUTIONS TOGETHER**
+
+![All Distributions][image7]
+
+Although these histograms are flatter, this didn't work out well, and new models trained using these augmentation
+techniques on either a single track or on both were not able to keep the car on the road. As we have already seen, the
 original data was recorded with a behaviour in mind that can't be learned by this type of neural network, so it's not
 the best data to generate a model that center lane drives the car properly.
-
-TODO: training/validation changes as validation is not augmented
 
 Therefore, augmenting it won't help to generate a better model, as the original data used to create the it is already
 "wrong". In other words, shit in, shit out.
@@ -615,6 +667,5 @@ have been augmented by shifting them horizontally and adjusting the steering ang
 
 
 ##### Alternatives to Obtain Training Data
-
 
 TODO: Mention augmentation using Carla or shifting the images..
