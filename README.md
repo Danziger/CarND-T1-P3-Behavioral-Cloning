@@ -133,6 +133,6 @@ Interesting reads
   
   https://www.picalike.com/blog/2015/11/28/relu-was-yesterday-tomorrow-comes-elu/
   
-  - Nvidia looks to reduce AI training material through 'imagination':
+- Nvidia looks to reduce AI training material through 'imagination':
   
   https://www-zdnet-com.cdn.ampproject.org/c/www.zdnet.com/google-amp/article/nvidia-looks-to-reduce-ai-training-material-through-imagination/
